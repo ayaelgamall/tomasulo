@@ -14,7 +14,6 @@ import { useState, useEffect } from 'react';
 
 function Anim() {
     const theme = createTheme();
-    const [UserNames, setUserNames] = useState([]);
     const [Main, setMain] = useState([]);
     //{Instruction={MUL, R1, R2, R3}, Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
     //
