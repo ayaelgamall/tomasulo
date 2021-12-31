@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 
 function Anim() {
     const theme = createTheme();
-    const [Main, setMain] = useState([]);
+    const [main, setMain] = useState([]);
     //{Instruction={MUL, R1, R2, R3}, Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
     //
     const [add, setAdd] = useState([]);//{{tag=M1,op=,...,idx=0},{},{}}
