@@ -74,7 +74,7 @@ function Anim() {
         // for(int i=0;i< ;i++) loop ya3ni be ay shakl
         //       instruction = add[i]
         //        if(inst didn't already start exec){
-        //          if(regReady(instruction's 1st reg) && regReady(instruction's 2nd reg)){
+        //          if(Qk==0&&Qj==0)){
         //          execute ba2a add or sub or div or mul
         //         }
         //         else{
