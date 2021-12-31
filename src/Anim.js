@@ -16,13 +16,14 @@ function Anim() {
     const theme = createTheme();
     const [UserNames, setUserNames] = useState([]);
     const [Main, setMain] = useState([]);
-    const [add, setAdd] = useState([]);
-    const [sub, setSub] = useState([]);
-    const [mult, setMult] = useState([]);
-    const [div, setDiv] = useState([]);
+    //{Instruction={MUL, R1, R2, R3}, Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
+    //
+    const [add, setAdd] = useState([]);//{{tag=M1,op=,...,idx=0},{},{}}
+    const [mul, setMul] = useState([]);
     const [load, setLoad] = useState([]);
     const [store, setStore] = useState([]);
     const [reg, setReg] = useState([]);
+    const latency=[];
     // console.log("here")
     let cycle =0;
     let cont =true;
