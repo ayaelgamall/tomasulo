@@ -49,11 +49,18 @@ function Anim() {
 
     }
 
-    function startExecution(){}
+    function startExecution(){
+        //put tag in reg
+    }
 
-    function endExecution(){}
+    function endExecution(){
+        // remove instruction from reservation station
+        // dependent instructions are given result value of ended instruction
+    }
 
-    function  writeResult(){}
+    function  writeResult(){
+        //put val instead of tag in reg file 
+    }
 
     
     function loopOnStations(){
@@ -67,17 +74,13 @@ function Anim() {
         // for(int i=0;i< ;i++) loop ya3ni be ay shakl
         //       instruction = add[i]
         //        if(inst didn't already start exec && regReady(instruction's 1st reg) && regReady(instruction's 2nd reg)){
-        //          startExecution(instruction)
         //          n1 =  readReg(instruction's 1st reg);
         //          n2 =  readReg(instruction's 2nd reg);
         //          execute ba2a add or sub or div or mul
         //         }
-        //         else
-        //            endExecution(instruction) bnedkholha w gowa el end bn check if it's time to end it fe3lan wala la2
-
+        //        
     }
     function loopOnMul(){
-
     }
 
     function loopOnLoadStore(){
@@ -86,7 +89,6 @@ function Anim() {
 
     function stringToInstruction(string){
         //returns object in the form {MUL, R1, R2, R3} or {LD, 100} 
-        
     }
 
     function type(instruction){
@@ -99,6 +101,7 @@ function Anim() {
     }
 
     function putInStation(instruction, stationIdx){
+        //w update el tag bel station example: tag=M1
         //void
     }
 
@@ -113,7 +116,6 @@ function Anim() {
 
     function checkDependency(Reg1, Reg2){
         //returns boolean true if no dep, false if there is a dep
-
     }
 
     function add(n1, n2){
@@ -139,6 +141,7 @@ function Anim() {
     function store(val, address){
         //void
     }
+
     return (
         <div>
 
