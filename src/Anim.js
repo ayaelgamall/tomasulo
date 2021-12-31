@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from 'react';
+
 const useStyles = makeStyles(styles);
 
 function Anim() {
