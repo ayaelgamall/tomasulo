@@ -78,12 +78,12 @@ function Anim() {
         //          execute ba2a add or sub or div or mul
         //         }
         //         else{
-        //          if(regReady(instruction's 1st reg)){
-        //              Vk=  readReg(instruction's 1ST reg);
+        //          if(Qk!=0 && regReady(instruction's 1st reg)){
+        //              Vk =  readReg(instruction's 1ST reg);
         //              Qk=0
         //              update Vk & Qk
         //          }
-        //          else if(regReady(instruction's 2nd reg)){
+        //          else if(Qj!=0 && regReady(instruction's 2nd reg)){
         //              UPDATE Vj & Qj
         //              Vj =  readReg(instruction's 2nd reg);
         //              Qj=0
