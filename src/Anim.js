@@ -81,10 +81,10 @@ function Anim() {
         //         }
         //         else{
         //          if(regReady(instruction's 1st reg)){
-        //              update Vk
+        //              update Vk & Qk
         //          }
-        //          else  if(regReady(instruction's 2nd reg)){
-        //              UPDATE vJ
+        //          else if(regReady(instruction's 2nd reg)){
+        //              UPDATE Vj & Qj
         //          }
         //        }
 
