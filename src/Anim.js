@@ -45,7 +45,7 @@ function Anim() {
         // {
         //    putInStation(instruction,stationType)
         // }
-        //    loopOnStations()
+        // loopOnStations()
 
     }
 
@@ -54,8 +54,8 @@ function Anim() {
     }
 
     function endExecution(){
-        // remove instruction from reservation station
-        // dependent instructions are given result value of ended instruction
+        // remove instructions from reservation station
+        // dependent instructions are given result value of ended instructions
     }
 
     function  writeResult(){
@@ -71,27 +71,27 @@ function Anim() {
 
     function loopOnAdd()
     {
-        // for(int i=0;i< ;i++) loop ya3ni be ay shakl
+        // for(int i=0;i<add.length;i++){ loop ya3ni be ay shakl
         //       instruction = add[i]
         //        if(inst didn't already start exec){
-        //          if(Qk==0&&Qj==0)){
-        //          execute ba2a add or sub or div or mul
+        //          if(Qk==0 && Qj==0){
+        //              execute ba2a add or sub or div or mul
         //         }
         //         else{
         //          if(Qk!=0 && regReady(instruction's 1st reg)){
         //              Vk =  readReg(instruction's 1ST reg);
-        //              Qk=0
+        //              Qk = 0
         //              update Vk & Qk
         //          }
         //          else if(Qj!=0 && regReady(instruction's 2nd reg)){
         //              UPDATE Vj & Qj
         //              Vj =  readReg(instruction's 2nd reg);
-        //              Qj=0
+        //              Qj = 0
         //          }
         //        }
-
-        //        
+        // }      
     }
+
     function loopOnMul(){
     }
 
@@ -126,9 +126,7 @@ function Anim() {
         //returns value 
     }
 
-    function checkDependency(Reg1, Reg2){
-        //returns boolean true if no dep, false if there is a dep
-    }
+
 
     function add(n1, n2){
         //ret ans
