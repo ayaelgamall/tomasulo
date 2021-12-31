@@ -75,16 +75,18 @@ function Anim() {
         //       instruction = add[i]
         //        if(inst didn't already start exec){
         //          if(regReady(instruction's 1st reg) && regReady(instruction's 2nd reg)){
-        //          n1 =  readReg(instruction's 1st reg);
-        //          n2 =  readReg(instruction's 2nd reg);
         //          execute ba2a add or sub or div or mul
         //         }
         //         else{
         //          if(regReady(instruction's 1st reg)){
+        //              Vk=  readReg(instruction's 1ST reg);
+        //              Qk=0
         //              update Vk & Qk
         //          }
         //          else if(regReady(instruction's 2nd reg)){
         //              UPDATE Vj & Qj
+        //              Vj =  readReg(instruction's 2nd reg);
+        //              Qj=0
         //          }
         //        }
 
