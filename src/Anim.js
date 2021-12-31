@@ -3,17 +3,17 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
+
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
-import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from 'react';
-const useStyles = makeStyles(styles);
 
 function Anim() {
-    const classes = useStyles();
+    const theme = createTheme();
     const [UserNames, setUserNames] = useState([]);
     const [Main, setMain] = useState([]);
     const [add, setAdd] = useState([]);
@@ -60,8 +60,8 @@ function Anim() {
                 //     backgroundPosition: "top center",
                 // }}
             >
-                <div className={classes.container}>
-
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
                     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                             <Typography component="h1" variant="h4" align="center">
@@ -88,9 +88,8 @@ function Anim() {
                         </Paper>
                     </Container>
 
+                    </ThemeProvider>
 
-                </div>
-                <Footer />
             </div>
         </div>
     )
