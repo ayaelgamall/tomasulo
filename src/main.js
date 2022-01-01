@@ -10,6 +10,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
+import {loopOnAdd} from './Anim'
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from 'react';
