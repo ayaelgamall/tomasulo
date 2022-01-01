@@ -20,19 +20,16 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
+// import './App.css';
 // const useStyles = makeStyles(styles);
 
 
-function Main() {
+export default function Main() {
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
 
   return (
     <div>
-
-<Typography component="h1" variant="h4" align="center">
-                            TOMASOLO
-                        </Typography>
         <div
             // className={classes.pageHeader}
             // style={{
@@ -88,6 +85,204 @@ function Main() {
                           </Box>
                         </Grid>
                         
+
+                        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                          <Box
+                            sx={{
+                              my: 8,
+                              mx: 4,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Typography component="h1" variant="h5">
+                            Change Latency 
+                                                      </Typography>
+                            <Box component="form" noValidate  sx={{ mt: 1 }}>
+                            <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id="email"
+                                label="Change ADD latency"
+                                name="email"
+                                value="1"
+                                autoComplete="email"
+                                autoFocus
+                              />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id="email"
+                                label="Change SUB latency"
+                                name="email"
+                                autoComplete="email"
+                                value="1"
+                                autoFocus
+                              />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                              margin="normal"
+                              fullWidth
+                              id="email"
+                              label="Change MUL latency"
+                              name="email"
+                              autoComplete="email"
+                              value="1"
+                              autoFocus
+                              /></Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                              margin="normal"
+                              fullWidth
+                              id="email"
+                              label="Change DIV latency"
+                              name="email"
+                              autoComplete="email"
+                              value="1"
+                              autoFocus
+                            /></Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Change LD latency"
+                            name="email"
+                            autoComplete="email"
+                            value="1"
+                            autoFocus
+                            /></Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Change ST latency"
+                            name="email"
+                            autoComplete="email"
+                            value="1"
+                            autoFocus
+                            />
+                            </Grid>
+                              
+                              
+                              <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                              >
+                                Change
+                              </Button>
+                              </Grid>
+                            </Box>
+                          </Box>
+                        </Grid>
+                        sdfcgvbhjnkm,
+                        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                          <Box
+                            sx={{
+                              my: 8,
+                              mx: 4,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Typography component="h1" variant="h5">
+                            Change Latency 
+                                                      </Typography>
+                            <Box component="form" noValidate  sx={{ mt: 1 }}>
+                            <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id="email"
+                                label="Change ADD latency"
+                                name="email"
+                                value="1"
+                                autoComplete="email"
+                                autoFocus
+                              />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id="email"
+                                label="Change SUB latency"
+                                name="email"
+                                autoComplete="email"
+                                value="1"
+                                autoFocus
+                              />
+                              </Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                              margin="normal"
+                              fullWidth
+                              id="email"
+                              label="Change MUL latency"
+                              name="email"
+                              autoComplete="email"
+                              value="1"
+                              autoFocus
+                              /></Grid>
+                              <Grid item xs={12} sm={6}>
+                              <TextField
+                              margin="normal"
+                              fullWidth
+                              id="email"
+                              label="Change DIV latency"
+                              name="email"
+                              autoComplete="email"
+                              value="1"
+                              autoFocus
+                            /></Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Change LD latency"
+                            name="email"
+                            autoComplete="email"
+                            value="1"
+                            autoFocus
+                            /></Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Change ST latency"
+                            name="email"
+                            autoComplete="email"
+                            value="1"
+                            autoFocus
+                            />
+                            </Grid>
+                              
+                              
+                              <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                              >
+                                Change
+                              </Button>
+                              </Grid>
+                            </Box>
+                          </Box>
+                        </Grid>
                         
                         <React.Fragment>
 
@@ -120,7 +315,6 @@ function Main() {
 )
 }
 
-export default Main;
 // import * as React from 'react';
 // import ReactDOM from 'react-dom';
 // import Button from '@mui/material/Button';
