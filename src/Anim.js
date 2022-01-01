@@ -56,13 +56,21 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
+    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+
+    //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
     const [add, setAdd] = useState(getInitialState("A"));
+    
+    //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
     const [mul, setMul] = useState(getInitialState("M"));
+
     const [load, setLoad] = useState(getInitialStateLoad());
+
     const [store, setStore] = useState(getInitialStateStore);
+
+    // reg: [{Qi= , val= }]
     const [reg, setReg] = useState(getInitialStateReg());
-    //[{val, Qi}]
+
     const latency=key.latency;
     // console.log("here")
     let cycle =0;
@@ -219,27 +227,24 @@ function Anim() {
 
     function loopOnAdd()
     {
-    //     for(let i=0;i<add.length;i++){ loop ya3ni be ay shakl
-    //           instruction = add[i]
-    //            if(inst didn't already start exec){
-                    
-    //              if(Qk!=0 && regReady(instruction's 1st reg)){
-    //                  Vk =  readReg(instruction's 1ST reg);
-    //                  Qk = 0
-    //                  update Vk & Qk
-    //              }
+        add.forEach(addRecord=> {
+            instruction=main[addRecord.idx];
+            if(!addRecord.started){        
+                if(addRecord.Qk!=0 && regReady(instruction.RS)){
+                    addRecord.Vk =  readReg(instruction.RS)
+                    addRecord.Qk = 0
+                }
 
-    //              if(Qj!=0 && regReady(instruction's 2nd reg)){
-    //                  UPDATE Vj & Qj
-    //                  Vj =  readReg(instruction's 2nd reg);
-    //                  Qj = 0
-    //              }
+                if(addRecord.Qj!=0 && regReady(instruction.RT)){
+                    addRecord.Vj =  readReg(instruction.RT)
+                    addRecord.Qj = 0
+                }
 
-    //             if(Qk==0 && Qj==0){
-    //                  execute ba2a add or sub or div or mul
-    //             }
-              
-
+                if(addRecord.Qk==0 && addRecord.Qj==0){
+                    //  execute ba2a add or sub or div or mul
+                }
+            }
+        });
     }
 
     function loopOnMul(){
