@@ -239,7 +239,7 @@ function Anim() {
     //                  execute ba2a add or sub or div or mul
     //             }
               
-        }      
+
     }
 
     function loopOnMul(){
