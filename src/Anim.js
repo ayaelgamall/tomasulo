@@ -227,8 +227,11 @@ function Anim() {
 
     function loopOnAdd()
     {
-        add.forEach(addRecord=> {
-            const instruction = main[addRecord.idx];
+        var BusyAdd = add.filter(inst => inst.busy===1);
+
+
+        BusyAdd.forEach(addRecord=> {
+           const instruction = main[addRecord.idx];
             if(!addRecord.started){        
                 if(addRecord.Qk!=0 && regReady(instruction.RS)){
                     addRecord.Vk =  readReg(instruction.RS)
