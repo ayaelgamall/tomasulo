@@ -11,23 +11,92 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
 import { useState, useEffect } from 'react';
+import {
+    styled,
+    Table,
+    TableBody,
+    TableCell,
+    tableCellClasses,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
+import {useLocation} from "react-router-dom";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableHead = styled(TableCell)(({ theme }) => ({
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 function Anim() {
+    const location = useLocation();
+    const key = location.state;
     const theme = createTheme();
-    const [main, setMain] = useState([]);
+    const [main, setMain] = useState(key.Instructions);
     //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
-    //
-    const [add, setAdd] = useState([]);//{{tag=M1,op=,...,idx=0},{},{}}
-    const [mul, setMul] = useState([]);
-    const [load, setLoad] = useState([]);
-    const [store, setStore] = useState([]);
-    const [reg, setReg] = useState([]);
-    const latency=[];
+    const [add, setAdd] = useState(getInitialState("A"));
+    const [mul, setMul] = useState(getInitialState("M"));
+    const [load, setLoad] = useState(getInitialStateLoad());
+    const [store, setStore] = useState(getInitialStateStore);
+    const [reg, setReg] = useState(getInitialStateReg());
+    //[{val, Qi}]
+    const latency=key.latency;
     // console.log("here")
     let cycle =0;
     let cont =true;
     let inst=0;//user
     let write=0;
+
+    function getInitialStateStore() {
+        let res=[];
+        for (let i = 1; i <= 3; i++) {
+            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:""});
+        }
+        return res;
+    }
+    function getInitialStateReg() {
+        let res=[];
+        for (let i = 0; i < 32; i++) {
+            res.push({tag:"F"+i,Qi:"",val:""});
+        }
+        return res;
+    }
+
+    function getInitialState(a) {
+        return [
+            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            ];
+    }
+    function getInitialStateLoad() {
+        return [{tag: "L1", Address: "", busy: "", idx: ""},
+            {tag: "L2", Address: "", busy: "", idx: ""},
+            {tag: "L3",Address: "",busy: "",idx: ""}];
+    }
     function doCycle() {
         cycle++;
         issue();
@@ -58,8 +127,87 @@ function Anim() {
         // dependent instructions are given result value of ended instructions
     }
 
+    //iman
+    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
+    //{{tag=M1,op=,...,idx=0},{},{}}
     function  writeResult(){
-        //put val instead of tag in reg file 
+        //1st check if any inst is done excuting but haven't WB yet 
+        //i need to go/loop in order 3shan if conflict -> FIFO
+        
+        //after finding an inst that wants to WB 
+        /* loop over reg file, add and mul res stations, any tag replace w instruction o/p
+        free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
+        write curr cycle in big table
+         */
+        
+        var waiting = main.filter(inst => inst.WB===null && inst.endExecution!==null);
+        var curr = waiting[0]; //the inst that'll WB dlw2ty 
+
+        //update reg file, add and mul res stations
+        reg.forEach(r=> {
+            if(r.Qi === curr.tag){ //TODO - CHECK reg structureee
+                //inst output hykon feen???
+                //r.val=curr.output; 
+                setReg(prevState => ({
+                    ...prevState,
+                    //a2ol "r" wla a2ol eh
+                    r:{
+                        val:curr.output,
+                        Qi:null
+                    }
+                }));
+            }
+        });
+        add.forEach(a=> {
+            if(a.Qk === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "a" wla a2ol eh
+                    a:{
+                        Qk:null,
+                        Vk: curr.output
+                    }
+                }));
+            }
+            if(a.Qj === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "a" wla a2ol eh
+                    a:{
+                        Qj:null,
+                        Vj: curr.output
+                    }
+                }));
+            }
+        });
+        mul.forEach(m=> {
+            if(m.Qk === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "m" wla a2ol eh
+                    m:{
+                        Qk:null,
+                        Vk: curr.output
+                    }
+                }));
+            }
+            if(m.Qj === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "m" wla a2ol eh
+                    m:{
+                        Qj:null,
+                        Vj: curr.output
+                    }
+                }));
+            }
+        });
+
+        
     }
 
     
@@ -71,25 +219,27 @@ function Anim() {
 
     function loopOnAdd()
     {
-        // for(int i=0;i<add.length;i++){ loop ya3ni be ay shakl
-        //       instruction = add[i]
-        //        if(inst didn't already start exec){
-        //          if(Qk==0 && Qj==0){
-        //              execute ba2a add or sub or div or mul
-        //         }
-        //         else{
-        //          if(Qk!=0 && regReady(instruction's 1st reg)){
-        //              Vk =  readReg(instruction's 1ST reg);
-        //              Qk = 0
-        //              update Vk & Qk
-        //          }
-        //          else if(Qj!=0 && regReady(instruction's 2nd reg)){
-        //              UPDATE Vj & Qj
-        //              Vj =  readReg(instruction's 2nd reg);
-        //              Qj = 0
-        //          }
-        //        }
-        // }      
+    //     for(let i=0;i<add.length;i++){ loop ya3ni be ay shakl
+    //           instruction = add[i]
+    //            if(inst didn't already start exec){
+                    
+    //              if(Qk!=0 && regReady(instruction's 1st reg)){
+    //                  Vk =  readReg(instruction's 1ST reg);
+    //                  Qk = 0
+    //                  update Vk & Qk
+    //              }
+
+    //              if(Qj!=0 && regReady(instruction's 2nd reg)){
+    //                  UPDATE Vj & Qj
+    //                  Vj =  readReg(instruction's 2nd reg);
+    //                  Qj = 0
+    //              }
+
+    //             if(Qk==0 && Qj==0){
+    //                  execute ba2a add or sub or div or mul
+    //             }
+              
+
     }
 
     function loopOnMul(){
@@ -153,6 +303,34 @@ function Anim() {
         //void
     }
 
+    function InstructionsFront() {
+        return(
+        <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 800 }} aria-label="customized table">
+                <TableHead>
+                    <TableRow>
+                        <StyledTableHead> </StyledTableHead>
+                        <StyledTableHead align="right">Issue</StyledTableHead>
+                        <StyledTableHead align="right">Execute</StyledTableHead>
+                        <StyledTableHead align="right">Write Result</StyledTableHead>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {main.map((row) => (
+                        <StyledTableRow >
+                            <StyledTableCell scope="row">
+                                {row.Instruction}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">{row.Issue}</StyledTableCell>
+                            <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                            <StyledTableCell align="right">{row.WB}</StyledTableCell>
+                        </StyledTableRow>))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        )
+    }
+
     return (
         <div>
 
@@ -173,7 +351,9 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
-
+                                <React.Fragment>
+                                    {InstructionsFront()}
+                                </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 
