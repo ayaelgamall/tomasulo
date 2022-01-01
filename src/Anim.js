@@ -14,15 +14,15 @@ import { useState, useEffect } from 'react';
 
 function Anim() {
     const theme = createTheme();
-    const [UserNames, setUserNames] = useState([]);
-    const [Main, setMain] = useState([]);
-    const [add, setAdd] = useState([]);
-    const [sub, setSub] = useState([]);
-    const [mult, setMult] = useState([]);
-    const [div, setDiv] = useState([]);
+    const [main, setMain] = useState([]);
+    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
+    //
+    const [add, setAdd] = useState([]);//{{tag=M1,op=,...,idx=0},{},{}}
+    const [mul, setMul] = useState([]);
     const [load, setLoad] = useState([]);
     const [store, setStore] = useState([]);
     const [reg, setReg] = useState([]);
+    const latency=[];
     // console.log("here")
     let cycle =0;
     let cont =true;
@@ -38,15 +38,120 @@ function Anim() {
         //delay
         writeResult();
     }
-    function issue(){}
+    function issue(){
+        // instruction=stringToInstruction(inst gdeeda)
+        // stationType=type(instruction)
+        // if(stationAvailable(stationType))
+        // {
+        //    putInStation(instruction,stationType)
+        // }
+        // loopOnStations()
 
-    function startExecution(){}
+    }
 
-    function endExecution(){}
+    function startExecution(){
+        //put tag in reg
+    }
 
-    function  writeResult(){}
+    function endExecution(){
+        // remove instructions from reservation station
+        // dependent instructions are given result value of ended instructions
+    }
+
+    function  writeResult(){
+        //put val instead of tag in reg file 
+    }
+
+    
+    function loopOnStations(){
+       loopOnAdd()
+       loopOnMul()
+       loopOnLoadStore()
+    }
+
+    function loopOnAdd()
+    {
+        // for(int i=0;i<add.length;i++){ loop ya3ni be ay shakl
+        //       instruction = add[i]
+        //        if(inst didn't already start exec){
+        //          if(Qk==0 && Qj==0){
+        //              execute ba2a add or sub or div or mul
+        //         }
+        //         else{
+        //          if(Qk!=0 && regReady(instruction's 1st reg)){
+        //              Vk =  readReg(instruction's 1ST reg);
+        //              Qk = 0
+        //              update Vk & Qk
+        //          }
+        //          else if(Qj!=0 && regReady(instruction's 2nd reg)){
+        //              UPDATE Vj & Qj
+        //              Vj =  readReg(instruction's 2nd reg);
+        //              Qj = 0
+        //          }
+        //        }
+        // }      
+    }
+
+    function loopOnMul(){
+    }
+
+    function loopOnLoadStore(){
+
+    }
+
+    function stringToInstruction(string){
+        //returns object in the form {MUL, R1, R2, R3} or {LD, 100} 
+    }
+
+    function type(instruction){
+        // returns int 1 or 2 or 3 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(ld/str)
+    }
+    function stationAvailable(stationIdx){
+        // masalan law stationIdx=1: yb2a check el (add/sub), 
+        // law stationIdx=2: yb2a check el (mul/div), 
+        // law stationIdx=3: yb2a check el (ld/str)
+        // returns boolean
+    }
+
+    function putInStation(instruction, stationIdx){
+        //w update el tag bel station example: tag=M1
+        //void
+    }
+
+    function regReady(register){
+        //returns true register has val, false if no val yet (just tag)
+        //always call this before calling readReg
+    }
+
+    function readReg(register){
+        //returns value 
+    }
 
 
+
+    function add(n1, n2){
+        //ret ans
+    }
+
+    function sub(n1, n2){
+        //ret ans
+    }   
+
+    function mul(n1, n2){
+        //ret ans
+    }   
+
+    function div(n1, n2){
+        //ret ans
+    }   
+
+    function load(address){
+        //ret ans
+    }
+
+    function store(val, address){
+        //void
+    }
 
     return (
         <div>
