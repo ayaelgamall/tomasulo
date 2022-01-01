@@ -20,18 +20,19 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import './App.css';
 // const useStyles = makeStyles(styles);
 
 
-function App() {
+function Main() {
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
 
   return (
     <div>
 
-
+<Typography component="h1" variant="h4" align="center">
+                            TOMASOLO
+                        </Typography>
         <div
             // className={classes.pageHeader}
             // style={{
@@ -119,7 +120,7 @@ function App() {
 )
 }
 
-export default App;
+export default Main;
 // import * as React from 'react';
 // import ReactDOM from 'react-dom';
 // import Button from '@mui/material/Button';
