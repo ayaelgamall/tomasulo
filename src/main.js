@@ -27,26 +27,35 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
+import { useNavigate } from 'react-router-dom';
+
+
 // import './App.css';
 // const useStyles = makeStyles(styles);
 let data = [];
 let idx=0;
 export default function Main() {
+    let navigate = useNavigate();
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
   const [tables,setTable]=useState(data);
+  const [ADD,setADD]=useState(1);
+  const [SUB,setSUB]=useState(1);
+  const [MUL,setMUL]=useState(1);
+  const [DIV,setDIV]=useState(1);
+  const [LD,setLD]=useState(1);
+  const [ST,setST]=useState(1);
   
     function addInstruction(){
         console.log("data");
         console.log(Instructions);
 
-
-        data.push(
-        {
+        let data=tables.concat({
             id : ++idx,
             Instruction:Instructions,
             Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
-        });
+        })
+        
         setTable(data);
         console.log(data);
 
@@ -108,11 +117,7 @@ export default function Main() {
                                 Add Instruction
                                
                               </Button>
-                              <div>
-                                        <button onClick={() => console.log("clicked")}>
-                                          Test
-                                        </button>
-                                </div>
+                             
                             </Box>
                           </Box>
                           
@@ -140,75 +145,82 @@ export default function Main() {
                               <TextField
                                 margin="normal"
                                 fullWidth
-                                id="email"
                                 label="Change ADD latency"
-                                name="email"
-                                value="1"
-                                autoComplete="email"
+                                onChange={ (e)=> {
+                                    setADD(e.target.value);
+                                }
+                            }
+                            value={ADD}
                                 autoFocus
+
                               />
                               </Grid>
                               <Grid item xs={12} sm={6}>
                               <TextField
                                 margin="normal"
                                 fullWidth
-                                id="email"
                                 label="Change SUB latency"
-                                name="email"
-                                autoComplete="email"
-                                value="1"
-                                autoFocus
+                             
+                                onChange={ (e)=> {
+                                    setSUB(e.target.value);
+                                }
+                            }
+                            value={SUB}                                autoFocus
                               />
                               </Grid>
                               <Grid item xs={12} sm={6}>
                               <TextField
                               margin="normal"
                               fullWidth
-                              id="email"
                               label="Change MUL latency"
-                              name="email"
-                              autoComplete="email"
-                              value="1"
+                              onChange={ (e)=> {
+                                setMUL(e.target.value);
+                            }
+                        }
+                        value={MUL}
                               autoFocus
                               /></Grid>
                               <Grid item xs={12} sm={6}>
                               <TextField
                               margin="normal"
                               fullWidth
-                              id="email"
                               label="Change DIV latency"
-                              name="email"
-                              autoComplete="email"
-                              value="1"
+                              
+                              onChange={ (e)=> {
+                                setDIV(e.target.value);
+                            }
+                        }
+                        value={DIV}
                               autoFocus
                             /></Grid>
                             <Grid item xs={12} sm={6}>
                             <TextField
                             margin="normal"
                             fullWidth
-                            id="email"
                             label="Change LD latency"
-                            name="email"
-                            autoComplete="email"
-                            value="1"
-                            autoFocus
+                            onChange={ (e)=> {
+                                setLD(e.target.value);
+                            }
+                        }
+                        value={LD}                            autoFocus
                             /></Grid>
                             <Grid item xs={12} sm={6}>
                             <TextField
                             margin="normal"
                             fullWidth
-                            id="email"
                             label="Change ST latency"
-                            name="email"
-                            autoComplete="email"
-                            value="1"
+                          
+                            onChange={ (e)=> {
+                                setST(e.target.value);
+                            }
+                        }
+                        value={ST}
                             autoFocus
                             />
                             </Grid>
                               
                               
                               <Button
-                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
@@ -244,15 +256,16 @@ export default function Main() {
                                  <TableBody>
                                  {tables.map(item => (
                                     <TableRow key={item.id}>
+                                        <TableCell align="left">
+                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.id}</p>
+                                      </TableCell>
                                       <TableCell align="left">
                                         <p style={{ fontSize: "13px", margin: "0px" }}>{item.Instruction}</p>
                                       </TableCell>
-                                      <TableCell align="left">
-                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.id}</p>
-                                      </TableCell>
-                                      <TableCell>
+                                      
+                                      {/* <TableCell>
                                         <button >remove</button>{" "}
-                                      </TableCell>
+                                      </TableCell> */}
                                     </TableRow>
                                   ))
                                 }</TableBody>
@@ -270,9 +283,11 @@ export default function Main() {
 
                                 <Button
                                     variant="contained"
-                                    href="/Anim"
+                                    // href="/Anim"
                                     onClick={() => {
-                                       
+                                       navigate("/cycle",{state:{Instructions:tables,
+                                               latency:{add:ADD,sub:SUB,mul:MUL,div:DIV,ld:LD,str:ST}
+                                       }})
                                     }}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
