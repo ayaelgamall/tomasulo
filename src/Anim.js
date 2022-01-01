@@ -110,6 +110,7 @@ function Anim() {
         // masalan law stationIdx=1: yb2a check el (add/sub), 
         // law stationIdx=2: yb2a check el (mul/div), 
         // law stationIdx=3: yb2a check el (ld/str)
+        // returns boolean
     }
 
     function putInStation(instruction, stationIdx){
