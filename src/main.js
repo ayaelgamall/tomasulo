@@ -20,11 +20,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import './App.css';
+// import './App.css';
 // const useStyles = makeStyles(styles);
 
 
-function App() {
+export default function Main() {
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
 
@@ -119,7 +119,7 @@ function App() {
 )
 }
 
-export default App;
+
 // import * as React from 'react';
 // import ReactDOM from 'react-dom';
 // import Button from '@mui/material/Button';

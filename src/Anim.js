@@ -289,29 +289,29 @@ function Anim() {
 
 
 
-    function add(n1, n2){
-        //ret ans
-    }
-
-    function sub(n1, n2){
-        //ret ans
-    }   
-
-    function mul(n1, n2){
-        //ret ans
-    }   
-
-    function div(n1, n2){
-        //ret ans
-    }   
-
-    function load(address){
-        //ret ans
-    }
-
-    function store(val, address){
-        //void
-    }
+    // function add(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function sub(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function mul(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function div(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function load(address){
+    //     //ret ans
+    // }
+    //
+    // function store(val, address){
+    //     //void
+    // }
 
     function InstructionsFront() {
         return(
