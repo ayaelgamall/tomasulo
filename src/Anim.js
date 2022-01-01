@@ -259,6 +259,10 @@ function Anim() {
     }
 
     function type(instruction){
+        const op= instruction.substring(0,3).toLowerCase();
+        if(op==="add"|| op==="sub")return 1;
+        if(op==="mul"|| op==="div")return 2;
+        return 3;
         // returns int 1 or 2 or 3 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(ld/str)
     }
     function stationAvailable(stationIdx){
