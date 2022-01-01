@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import * as THREE from "three";
 import NET from 'vanta/dist/vanta.net.min'
+import {loopOnAdd} from './Anim'
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect,useRef } from 'react';
@@ -28,11 +29,15 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
+import { useNavigate } from 'react-router-dom';
+
+
 // import './App.css';
 // const useStyles = makeStyles(styles);
 let data = [];
 let idx=0;
 export default function Main() {
+    let navigate = useNavigate();
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
   const [tables,setTable]=useState(data);
@@ -303,9 +308,11 @@ export default function Main() {
 
                                 <Button
                                     variant="contained"
-                                    href="/Anim"
+                                    // href="/Anim"
                                     onClick={() => {
-                                       
+                                       navigate("/cycle",{state:{Instructions:tables,
+                                               latency:{add:ADD,sub:SUB,mul:MUL,div:DIV,ld:LD,str:ST}
+                                       }})
                                     }}
                                     sx={{ mt: 3, ml: 1 }}
                                 >

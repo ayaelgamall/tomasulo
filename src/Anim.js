@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
-
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -122,10 +121,24 @@ function Anim() {
         // {
         //    putInStation(instruction,stationType)
         // }
-        // loopOnStations()
 
     }
 
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+function ADD(n1,n2){return Number(n1)+Number(n2)}
+function DIV(n1,n2){return Number(n1)/Number(n2)}
+function SUB(n1,n2){return Number(n1)-Number(n2)}
+
+
+function exec(s,Vj,Vk){
+    const inst=s.split(',');
+    switch(inst[0]){
+        case "add": return ADD(Vj,Vk)
+        case "sub": return SUB(Vj,Vk)
+        case "mul": return MUL(Vj,Vk)
+        case "div": return DIV(Vj,Vk)
+    }
+}
     function startExecution(){
         //put tag in reg
     }
@@ -252,10 +265,6 @@ function Anim() {
 
     function loopOnLoadStore(){
 
-    }
-
-    function stringToInstruction(string){
-        //returns object in the form {MUL, R1, R2, R3} or {LD, 100} 
     }
 
     function type(instruction){
