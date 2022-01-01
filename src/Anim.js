@@ -21,7 +21,8 @@ function Anim() {
     const [mul, setMul] = useState([]);
     const [load, setLoad] = useState([]);
     const [store, setStore] = useState([]);
-    const [reg, setReg] = useState([]);
+    const [reg, setReg] = useState([]); 
+    //[{val, Qi}]
     const latency=[];
     // console.log("here")
     let cycle =0;
@@ -58,8 +59,87 @@ function Anim() {
         // dependent instructions are given result value of ended instructions
     }
 
+    //iman
+    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
+    //{{tag=M1,op=,...,idx=0},{},{}}
     function  writeResult(){
-        //put val instead of tag in reg file 
+        //1st check if any inst is done excuting but haven't WB yet 
+        //i need to go/loop in order 3shan if conflict -> FIFO
+        
+        //after finding an inst that wants to WB 
+        /* loop over reg file, add and mul res stations, any tag replace w instruction o/p
+        free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
+        write curr cycle in big table
+         */
+        
+        var waiting = main.filter(inst => inst.WB===null && inst.endExecution!==null);
+        var curr = waiting[0]; //the inst that'll WB dlw2ty 
+
+        //update reg file, add and mul res stations
+        reg.forEach(r=> {
+            if(r.Qi === curr.tag){ //TODO - CHECK reg structureee
+                //inst output hykon feen???
+                //r.val=curr.output; 
+                setReg(prevState => ({
+                    ...prevState,
+                    //a2ol "r" wla a2ol eh
+                    r:{
+                        val:curr.output,
+                        Qi:null
+                    }
+                }));
+            }
+        });
+        add.forEach(a=> {
+            if(a.Qk === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "a" wla a2ol eh
+                    a:{
+                        Qk:null,
+                        Vk: curr.output
+                    }
+                }));
+            }
+            if(a.Qj === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "a" wla a2ol eh
+                    a:{
+                        Qj:null,
+                        Vj: curr.output
+                    }
+                }));
+            }
+        });
+        mul.forEach(m=> {
+            if(m.Qk === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "m" wla a2ol eh
+                    m:{
+                        Qk:null,
+                        Vk: curr.output
+                    }
+                }));
+            }
+            if(m.Qj === curr.tag){ 
+                //inst output hykon feen???
+                setAdd(prevState => ({
+                    ...prevState,
+                    //a2ol "m" wla a2ol eh
+                    m:{
+                        Qj:null,
+                        Vj: curr.output
+                    }
+                }));
+            }
+        });
+
+        
     }
 
     
