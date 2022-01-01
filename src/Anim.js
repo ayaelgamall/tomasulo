@@ -262,10 +262,16 @@ function Anim() {
         const op= instruction.substring(0,3).toLowerCase();
         if(op==="add"|| op==="sub")return 1;
         if(op==="mul"|| op==="div")return 2;
-        return 3;
-        // returns int 1 or 2 or 3 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(ld/str)
+        if(op==="str")return 3;
+        return 4;
+        // returns int 1 or 2 or 3 or 4 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(str) 4.ld
     }
     function stationAvailable(stationIdx){
+        const station=stationIdx===1?add:stationIdx===2?mul:stationIdx===3?store:load;
+        station.forEach(row=>{
+            if(row.busy==="")return true;
+        });
+        return false;
         // masalan law stationIdx=1: yb2a check el (add/sub), 
         // law stationIdx=2: yb2a check el (mul/div), 
         // law stationIdx=3: yb2a check el (ld/str)
