@@ -219,25 +219,27 @@ function Anim() {
 
     function loopOnAdd()
     {
-        // for(int i=0;i<add.length;i++){ loop ya3ni be ay shakl
-        //       instruction = add[i]
-        //        if(inst didn't already start exec){
-        //          if(Qk==0 && Qj==0){
-        //              execute ba2a add or sub or div or mul
-        //         }
-        //         else{
-        //          if(Qk!=0 && regReady(instruction's 1st reg)){
-        //              Vk =  readReg(instruction's 1ST reg);
-        //              Qk = 0
-        //              update Vk & Qk
-        //          }
-        //          else if(Qj!=0 && regReady(instruction's 2nd reg)){
-        //              UPDATE Vj & Qj
-        //              Vj =  readReg(instruction's 2nd reg);
-        //              Qj = 0
-        //          }
-        //        }
-        // }      
+    //     for(let i=0;i<add.length;i++){ loop ya3ni be ay shakl
+    //           instruction = add[i]
+    //            if(inst didn't already start exec){
+                    
+    //              if(Qk!=0 && regReady(instruction's 1st reg)){
+    //                  Vk =  readReg(instruction's 1ST reg);
+    //                  Qk = 0
+    //                  update Vk & Qk
+    //              }
+
+    //              if(Qj!=0 && regReady(instruction's 2nd reg)){
+    //                  UPDATE Vj & Qj
+    //                  Vj =  readReg(instruction's 2nd reg);
+    //                  Qj = 0
+    //              }
+
+    //             if(Qk==0 && Qj==0){
+    //                  execute ba2a add or sub or div or mul
+    //             }
+              
+        }      
     }
 
     function loopOnMul(){
