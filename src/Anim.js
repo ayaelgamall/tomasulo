@@ -11,6 +11,44 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
 import { useState, useEffect } from 'react';
+import {
+    styled,
+    Table,
+    TableBody,
+    TableCell,
+    tableCellClasses,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableHead = styled(TableCell)(({ theme }) => ({
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 function Anim() {
     const theme = createTheme();
@@ -233,6 +271,34 @@ function Anim() {
         //void
     }
 
+    function InstructionsFront() {
+        return(
+        <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 800 }} aria-label="customized table">
+                <TableHead>
+                    <TableRow>
+                        <StyledTableHead> </StyledTableHead>
+                        <StyledTableHead align="right">Issue</StyledTableHead>
+                        <StyledTableHead align="right">Execute</StyledTableHead>
+                        <StyledTableHead align="right">Write Result</StyledTableHead>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {main.map((row) => (
+                        <StyledTableRow >
+                            <StyledTableCell scope="row">
+                                {row.Instruction}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">{row.Issue}</StyledTableCell>
+                            <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                            <StyledTableCell align="right">{row.WB}</StyledTableCell>
+                        </StyledTableRow>))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        )
+    }
+
     return (
         <div>
 
@@ -253,7 +319,9 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
-
+                                <React.Fragment>
+                                    {InstructionsFront()}
+                                </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 
