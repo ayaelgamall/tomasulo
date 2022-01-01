@@ -79,7 +79,11 @@ export default function Main() {
                               >
                                 Add Instruction
                               </Button>
-                              
+                              <div>
+                                        <button onClick={() => console.log("clicked")}>
+                                          Test
+                                        </button>
+                                </div>
                             </Box>
                           </Box>
                           
