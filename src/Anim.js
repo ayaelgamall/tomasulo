@@ -227,24 +227,24 @@ function Anim() {
 
     function loopOnAdd()
     {
-        add.forEach(addRecord=> {
-            instruction=main[addRecord.idx];
-            if(!addRecord.started){        
-                if(addRecord.Qk!=0 && regReady(instruction.RS)){
-                    addRecord.Vk =  readReg(instruction.RS)
-                    addRecord.Qk = 0
-                }
+    //     add.forEach(addRecord=> {
+    //         instruction=main[addRecord.idx];
+    //         if(!addRecord.started){        
+    //             if(addRecord.Qk!=0 && regReady(instruction.RS)){
+    //                 addRecord.Vk =  readReg(instruction.RS)
+    //                 addRecord.Qk = 0
+    //             }
 
-                if(addRecord.Qj!=0 && regReady(instruction.RT)){
-                    addRecord.Vj =  readReg(instruction.RT)
-                    addRecord.Qj = 0
-                }
+    //             if(addRecord.Qj!=0 && regReady(instruction.RT)){
+    //                 addRecord.Vj =  readReg(instruction.RT)
+    //                 addRecord.Qj = 0
+    //             }
 
-                if(addRecord.Qk==0 && addRecord.Qj==0){
-                    //  execute ba2a add or sub or div or mul
-                }
-            }
-        });
+    //             if(addRecord.Qk==0 && addRecord.Qj==0){
+    //                 //  execute ba2a add or sub or div or mul
+    //             }
+    //         }
+    //     });
     }
 
     function loopOnMul(){
