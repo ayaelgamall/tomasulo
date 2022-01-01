@@ -56,13 +56,13 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
 
-    // main: {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+    // main: {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:M1, address:null}
     const [main, setMain] = useState(key.Instructions);
 
-    //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
+    //add: {tag:A1, Qj:0, Qk:0, Vj: 5,Vk:2 ,temp:12, busy: 1, op:"add",started: true, endTime: 4, idx:0 }
     const [add, setAdd] = useState(getInitialState("A"));
     
-    //mul: {tag= M2, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
+    //mul: {tag: M2, Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: 10, busy: 1, op:"mul",started: true, endTime : 4, idx:1 }
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
@@ -227,22 +227,40 @@ function Anim() {
     }
 
    
-function loopOnAdd()
+    function loopOnAdd()
 {
-     //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
-    add= [{tag:"A1", Qj: 0, Qk:0, Vj:5,Vk:2 ,temp:12, busy: 0, op:"add",started: false, endTime :4, idx:0},
-          {tag:"A2", Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: 12, busy: 1, op:"add",started: false, endTime : 4, idx:1}]
+    currCycle=3
+    addLatency=2
+     //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }
+    add= [{tag:"A1", Qj: 0, Qk:0, Vj:5,Vk:2 ,temp:12, busy: 0, op:"add",started: false, endTime :4},
+          {tag:"A2", Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: null, busy: 1, op:"add",started: false, endTime : 4}]
     var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk===0 && inst.Qj===0 && !inst.started);
-    main =[{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:"A1", address:null, RD:1, RS:2, RT:3 },
-           {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:"A2", address:null, RD:1, RS:2, RT:3 }]
-           console.log("busy="+BusyAdd)
+    main =[{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
+           {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}]
+           
+    console.log("busy="+Object.values(BusyAdd))
 
     BusyAdd.forEach(addRecord=> {
-        console.log("hi")
-        instruction = main[addRecord.idx];
-        console.log("will execute"+instruction)
-        //  execute add or sub or div or mul
+        console.log("record "+Object.values(addRecord))
+
+        var instruction = add.find(x => x.tag === addRecord.tag);  
+        console.log("will execute"+Object.values(instruction))
+
+        if (instruction) {
+            instruction.started=true;
+            instruction.temp=exec(instruction.Instruction)
+        }
+
+        var found = main.find(x => x.tag === addRecord.tag);
+        if(found){
+            found.ExecStart=currCycle
+            found.ExecEnd=currCycle+addLatency
+        }
+        //  execute ba2a add or sub or div or mul
     });
+    add.forEach(inst=> {console.log("after change: "+Object.values(inst))});
+    main.forEach(inst=> {console.log("after change: "+Object.values(inst))});
+
 
 }
     function loopOnMul(){
