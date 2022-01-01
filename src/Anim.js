@@ -55,14 +55,13 @@ function Anim() {
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
-
-    // main: {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:M1, address:null}
     const [main, setMain] = useState(key.Instructions);
+    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
-    //add: {tag:A1, Qj:0, Qk:0, Vj: 5,Vk:2 ,temp:12, busy: 1, op:"add",started: true, endTime: 4, idx:0 }
+    //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
     const [add, setAdd] = useState(getInitialState("A"));
     
-    //mul: {tag: M2, Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: 10, busy: 1, op:"mul",started: true, endTime : 4, idx:1 }
+    //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
@@ -117,7 +116,8 @@ function Anim() {
         writeResult();
     }
     function issue(){
-        // stationType=type(instruction.Instruction)
+        // instruction=stringToInstruction(inst gdeeda)
+        // stationType=type(instruction)
         // if(stationAvailable(stationType))
         // {
         //    putInStation(instruction,stationType)
@@ -225,43 +225,28 @@ function Anim() {
        loopOnLoadStore()
     }
 
-   
     function loopOnAdd()
-{
-    currCycle=3
-    addLatency=2
-     //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }
-    add= [{tag:"A1", Qj: 0, Qk:0, Vj:5,Vk:2 ,temp:12, busy: 0, op:"add",started: false, endTime :4},
-          {tag:"A2", Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: null, busy: 1, op:"add",started: false, endTime : 4}]
-    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk===0 && inst.Qj===0 && !inst.started);
-    main =[{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
-           {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}]
-           
-    console.log("busy="+Object.values(BusyAdd))
+    {
+    //     add.forEach(addRecord=> {
+    //         instruction=main[addRecord.idx];
+    //         if(!addRecord.started){        
+    //             if(addRecord.Qk!=0 && regReady(instruction.RS)){
+    //                 addRecord.Vk =  readReg(instruction.RS)
+    //                 addRecord.Qk = 0
+    //             }
 
-    BusyAdd.forEach(addRecord=> {
-        console.log("record "+Object.values(addRecord))
+    //             if(addRecord.Qj!=0 && regReady(instruction.RT)){
+    //                 addRecord.Vj =  readReg(instruction.RT)
+    //                 addRecord.Qj = 0
+    //             }
 
-        var instruction = add.find(x => x.tag === addRecord.tag);  
-        console.log("will execute"+Object.values(instruction))
+    //             if(addRecord.Qk==0 && addRecord.Qj==0){
+    //                 //  execute ba2a add or sub or div or mul
+    //             }
+    //         }
+    //     });
+    }
 
-        if (instruction) {
-            instruction.started=true;
-            instruction.temp=exec(instruction.Instruction)
-        }
-
-        var found = main.find(x => x.tag === addRecord.tag);
-        if(found){
-            found.ExecStart=currCycle
-            found.ExecEnd=currCycle+addLatency
-        }
-        //  execute ba2a add or sub or div or mul
-    });
-    add.forEach(inst=> {console.log("after change: "+Object.values(inst))});
-    main.forEach(inst=> {console.log("after change: "+Object.values(inst))});
-
-
-}
     function loopOnMul(){
     }
 
@@ -288,22 +273,32 @@ function Anim() {
         //void
     }
 
-
-    function MUL(n1,n2){return Number(n1)*Number(n2)}
-    function ADD(n1,n2){return Number(n1)+Number(n2)}
-    function DIV(n1,n2){return Number(n1)/Number(n2)}
-    function SUB(n1,n2){return Number(n1)-Number(n2)}
-    
-    
-    function exec(s,Vj,Vk){
-        const inst=s.split(',');
-        switch(inst[0]){
-            case "add": return ADD(Vj,Vk)
-            case "sub": return SUB(Vj,Vk)
-            case "mul": return MUL(Vj,Vk)
-            case "div": return DIV(Vj,Vk)
-        }
+    function regReady(register){
+        //returns true register has val, false if no val yet (just tag)
+        //always call this before calling readReg
     }
+
+    function readReg(register){
+        //returns value 
+    }
+
+
+
+    // function add(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function sub(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function mul(n1, n2){
+    //     //ret ans
+    // }
+    //
+    // function div(n1, n2){
+    //     //ret ans
+    // }
     //
     // function load(address){
     //     //ret ans

@@ -2,23 +2,75 @@ import './App.css';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Main from './main'
 import Anim from "./Anim";
 // import { Routes } from 'react-router';
 
 function App() {
   return (
-
-      <BrowserRouter>
-          <Routes>
-        <Route exact path={"/"} element={<Main/>} />
-        <Route path={"/cycle"} element={<Anim/>}/>
-        </Routes>
-      </BrowserRouter>
+    <Main></Main>
+    // <Router>
+    //     <Route exact path="/" component={Main} />
+    //     <Route path="/cycle" component={Anim}/>
+    // </Router>
   );
 
 
 }
 
 export default App;
+
+// import './App.css';
+// import FlightForm from './components/FlightForm';
+// import { BrowserRouter as Router, Route } from 'react-router-dom';
+// // import { Routes } from 'react-router';
+// import AdminHome from './components/AdminHome';
+// import UserHome from './components/UserHome';
+// import UserSearchResults from './components/UserSearchResults';
+// import UserSearch from './components/UserSearch';
+// import FlightCard from './components/FlightCard';
+// import UserProfile from './components/UserProfile';
+// import Itinerary from './components/Itinerary'
+// import EditSeats from './components/SeatReservation/EditSeats';
+// import {SeatReservation} from'./components/SeatReservation/SeatReservation'
+// import {SeatPick} from'./components/SeatReservation/SeatPick'
+// import Signup from './components/Signup';
+// import Login from './components/Login';
+// import EditProfile from './components/EditProfile'
+// import ChangePassword from './components/ChangePassword'
+// import EditDepartureFlight from './components/EditDepartureFlight';
+// import EditReturnFlight from './components/EditReturnFlight';
+// import { withStyles } from '@mui/styles';
+// import {ResItinerary} from './components/SeatReservation/ResItinerary';
+// function App() {
+//   return (
+//     <Router>
+      
+//       <Route exact path="/" component={UserHome} />
+//       <Route exact path="/admin" component={AdminHome} />
+//       <Route path="/signup" component={Signup} />
+//       <Route path="/login" component={Login} />
+//       <Route path="/admin/createFlight" component={FlightForm} />
+//       <Route path="/user/searchResults" component={UserSearchResults} />
+//       <Route path="/user/ReturnSearchResults" component={UserSearchResults} />
+//       <Route path="/user/EditProfile" component={EditProfile} />
+//       <Route path="/user/ChangePassword" component={ChangePassword} />
+//       <Route path="/user/Profile" component={UserProfile} />
+//       <Route path="/user/EditSeats" component={EditSeats} />
+//       <Route path="/user/reservation" component={Itinerary} />
+//       <Route path="/user/editDepartureFlight" component={EditDepartureFlight} />
+//       <Route path="/user/editReturnFlight" component={EditReturnFlight} />
+//       <Route path="/user/seatReservation" component={SeatReservation} />
+//       <Route path="/user/ReserveSeats" component={SeatPick}/>
+//       <Route path="/it" component={ResItinerary}/>
+
+
+//     </Router>
+//   );
+
+
+// }
+
+// export default App;
+
