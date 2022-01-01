@@ -45,6 +45,7 @@ export default function Main() {
                         <Typography component="h1" variant="h4" align="center">
                             TOMASOLO
                         </Typography>
+                        <React.Fragment>
                         <Grid container spacing={2} justify="center" alignItems="center">
                         <Grid item xs={12} sm={5} textalign='center' component={Paper} elevation={6} square>
                           <Box
@@ -282,7 +283,7 @@ export default function Main() {
                         </Grid>
                         </Grid>
                        
-                        
+                        </React.Fragment>
                         <React.Fragment>
 
 
