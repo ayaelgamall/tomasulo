@@ -29,13 +29,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // import './App.css';
 // const useStyles = makeStyles(styles);
-let data = [
-    {
-        id : 0,
-        Instruction:"",
-        Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
-    }
-];
+let data = [];
 let idx=0;
 export default function Main() {
   // const classes = useStyles();
@@ -46,12 +40,13 @@ export default function Main() {
         console.log("data");
         console.log(Instructions);
 
-        data=data+
+
+        data.push(
         {
             id : ++idx,
             Instruction:Instructions,
             Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
-        }
+        });
         setTable(data);
         console.log(data);
 
@@ -105,7 +100,6 @@ export default function Main() {
                               
                               
                               <Button
-                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
