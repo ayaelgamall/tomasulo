@@ -248,7 +248,7 @@ function Anim() {
 
         if (instruction) {
             instruction.started=true;
-            instruction.temp=exec(instruction.Instruction)
+            instruction.temp=stringToInstruction(instruction.Instruction)
         }
 
         var found = main.find(x => x.tag === addRecord.tag);
@@ -290,21 +290,21 @@ function Anim() {
     }
 
 
-    // function add(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function sub(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function mul(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function div(n1, n2){
-    //     //ret ans
-    // }
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
+    
+    
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
+        switch(inst[0]){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
+        }
+    }
     //
     // function load(address){
     //     //ret ans
