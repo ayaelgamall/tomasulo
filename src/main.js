@@ -13,7 +13,13 @@ import Grid from '@mui/material/Grid';
 
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from 'react';
-
+import {
+  Table,
+  TableCell,
+  TableBody,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -22,12 +28,33 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // import './App.css';
 // const useStyles = makeStyles(styles);
-
-
+let data = [
+    {
+        id : 0,
+        Instruction:"",
+        Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
+    }
+];
+let idx=0;
 export default function Main() {
   // const classes = useStyles();
   const [Instructions, setInstructions] = useState([]);
+  const [tables,setTable]=useState(data);
+  
+    function addInstruction(){
+        console.log("data");
+        console.log(Instructions);
 
+        data=data+
+        {
+            id : ++idx,
+            Instruction:Instructions,
+            Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
+        }
+        setTable(data);
+        console.log(data);
+
+    }
   return (
     <div>
         <div
@@ -68,6 +95,11 @@ export default function Main() {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
+                                onChange={ (e)=> {
+                                        setInstructions(e.target.value);
+                                    
+                                }
+                            }
                               />
                               
                               
@@ -76,8 +108,10 @@ export default function Main() {
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
+                                onClick={addInstruction}
                               >
                                 Add Instruction
+                               
                               </Button>
                               
                             </Box>
@@ -197,90 +231,33 @@ export default function Main() {
                                     alignItems: 'center',
                                 }}>
                                     <Typography component="h1" variant="h5">
-                                        Change Latency
+                                        Your Instructions
                                     </Typography>
                                     <Box component="form" noValidate  sx={{ mt: 1 }}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change ADD latency"
-                                                    name="email"
-                                                    value="1"
-                                                    autoComplete="email"
-                                                    autoFocus
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change SUB latency"
-                                                    name="email"
-                                                    autoComplete="email"
-                                                    value="1"
-                                                    autoFocus
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change MUL latency"
-                                                    name="email"
-                                                    autoComplete="email"
-                                                    value="1"
-                                                    autoFocus
-                                                /></Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change DIV latency"
-                                                    name="email"
-                                                    autoComplete="email"
-                                                    value="1"
-                                                    autoFocus
-                                                /></Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change LD latency"
-                                                    name="email"
-                                                    autoComplete="email"
-                                                    value="1"
-                                                    autoFocus
-                                                /></Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    margin="normal"
-                                                    fullWidth
-                                                    id="email"
-                                                    label="Change ST latency"
-                                                    name="email"
-                                                    autoComplete="email"
-                                                    value="1"
-                                                    autoFocus
-                                                />
-                                            </Grid>
-
-
-                                            <Button
-                                                type="submit"
-                                                fullWidth
-                                                variant="contained"
-                                                sx={{ mt: 3, mb: 2 }}
-                                            >
-                                                Change
-                                            </Button>
-                                        </Grid>
+                                    <Table>
+                                     {/* <TableHead>
+                                   <TableRow >
+                                     <TableCell><strong>id</strong></TableCell>
+                                     <TableCell>name</TableCell>
+                                     <TableCell>action</TableCell>
+                                   </TableRow> 
+                                 </TableHead>*/}
+                                 <TableBody>
+                                 {tables.map(item => (
+                                    <TableRow key={item.id}>
+                                      <TableCell align="left">
+                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.Instruction}</p>
+                                      </TableCell>
+                                      <TableCell align="left">
+                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.id}</p>
+                                      </TableCell>
+                                      <TableCell>
+                                        <button >remove</button>{" "}
+                                      </TableCell>
+                                    </TableRow>
+                                  ))
+                                }</TableBody>
+                              </Table>
                                     </Box>
                                 </Box>
                             </Grid>
