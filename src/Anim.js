@@ -55,13 +55,14 @@ function Anim() {
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
-    const [main, setMain] = useState(key.Instructions);
-    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
-    //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
+    // main: {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+    const [main, setMain] = useState(key.Instructions);
+
+    //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
     const [add, setAdd] = useState(getInitialState("A"));
     
-    //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
+    //mul: {tag= M2, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
@@ -227,8 +228,11 @@ function Anim() {
 
     function loopOnAdd()
     {
-        add.forEach(addRecord=> {
-            instruction=main[addRecord.idx];
+        var BusyAdd = add.filter(inst => inst.busy===1);
+
+
+        BusyAdd.forEach(addRecord=> {
+            instruction = main[addRecord.idx];
             if(!addRecord.started){        
                 if(addRecord.Qk!=0 && regReady(instruction.RS)){
                     addRecord.Vk =  readReg(instruction.RS)
@@ -245,6 +249,7 @@ function Anim() {
                 }
             }
         });
+
     }
 
     function loopOnMul(){
