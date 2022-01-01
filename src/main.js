@@ -10,9 +10,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
+import * as THREE from "three";
+import NET from 'vanta/dist/vanta.net.min'
 
 import { makeStyles } from "@material-ui/core/styles";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import {
   Table,
   TableCell,
@@ -40,7 +42,30 @@ export default function Main() {
   const [DIV,setDIV]=useState(1);
   const [LD,setLD]=useState(1);
   const [ST,setST]=useState(1);
-  
+  const [vantaEffect, setVantaEffect] = useState(0)
+    const myRef = useRef(null)
+    useEffect(() => {
+        if (!vantaEffect) {
+            setVantaEffect(NET({
+                el: myRef.current,
+                THREE: THREE,
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 754.00,
+                minWidth: 200.00,
+                highlightColor: 0xb57a65,
+                midtoneColor: 0x4100ff,
+                lowlightColor: 0xb2ade2,
+                baseColor: 0xffffff,
+                color: 0xfceff,
+                backgroundColor: 0xc0c2b
+            }))
+        }
+        return () => {
+            if (vantaEffect) vantaEffect.destroy()
+        }
+    }, [vantaEffect])
     function addInstruction(){
         console.log("data");
         console.log(Instructions);
@@ -57,7 +82,7 @@ export default function Main() {
     }
   return (
     <div>
-        <div
+        <div 
             // className={classes.pageHeader}
             // style={{
             //     backgroundImage: "url(" + image + ")",
@@ -68,8 +93,8 @@ export default function Main() {
             <div >
 
                 <Container component="main" maxWidth="" sx={{ mb: 4 }}>
-                    <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <Typography component="h1" variant="h4" align="center">
+                    <Paper variant="outlined" className='background' ref={myRef} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        <Typography component="h1" variant="h4" color="white" align="center">
                             TOMASOLO
                         </Typography>
                         <React.Fragment>
