@@ -21,6 +21,7 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
+import {useLocation} from "react-router-dom";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
@@ -51,22 +52,51 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function Anim() {
+    const location = useLocation();
+    const key = location.state;
     const theme = createTheme();
-    const [main, setMain] = useState([]);
+    const [main, setMain] = useState(key.Instructions);
     //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
-    //
-    const [add, setAdd] = useState([]);//{{tag=M1,op=,...,idx=0},{},{}}
-    const [mul, setMul] = useState([]);
-    const [load, setLoad] = useState([]);
-    const [store, setStore] = useState([]);
-    const [reg, setReg] = useState([]); 
+    const [add, setAdd] = useState(getInitialState("A"));
+    const [mul, setMul] = useState(getInitialState("M"));
+    const [load, setLoad] = useState(getInitialStateLoad());
+    const [store, setStore] = useState(getInitialStateStore);
+    const [reg, setReg] = useState(getInitialStateReg());
     //[{val, Qi}]
-    const latency=[];
+    const latency=key.latency;
     // console.log("here")
     let cycle =0;
     let cont =true;
     let inst=0;//user
     let write=0;
+
+    function getInitialStateStore() {
+        let res=[];
+        for (let i = 1; i <= 3; i++) {
+            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:""});
+        }
+        return res;
+    }
+    function getInitialStateReg() {
+        let res=[];
+        for (let i = 0; i < 32; i++) {
+            res.push({tag:"F"+i,Qi:"",val:""});
+        }
+        return res;
+    }
+
+    function getInitialState(a) {
+        return [
+            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            ];
+    }
+    function getInitialStateLoad() {
+        return [{tag: "L1", Address: "", busy: "", idx: ""},
+            {tag: "L2", Address: "", busy: "", idx: ""},
+            {tag: "L3",Address: "",busy: "",idx: ""}];
+    }
     function doCycle() {
         cycle++;
         issue();
