@@ -148,7 +148,7 @@ function Anim() {
         write curr cycle in big table
          */
         
-        var waiting = main.filter(inst => inst.WB===null && inst.endExecution!==null);
+        var waiting = main.filter(inst => inst.WB==="" && inst.ExecEnd!=="");
         var curr = waiting[0]; //the inst that'll WB dlw2ty 
 
         //update reg file, add and mul res stations
@@ -161,7 +161,7 @@ function Anim() {
                     //a2ol "r" wla a2ol eh
                     r:{
                         val:curr.output,
-                        Qi:null
+                        Qi:""
                     }
                 }));
             }
@@ -173,7 +173,7 @@ function Anim() {
                     ...prevState,
                     //a2ol "a" wla a2ol eh
                     a:{
-                        Qk:null,
+                        Qk:"",
                         Vk: curr.output
                     }
                 }));
@@ -184,7 +184,7 @@ function Anim() {
                     ...prevState,
                     //a2ol "a" wla a2ol eh
                     a:{
-                        Qj:null,
+                        Qj:"",
                         Vj: curr.output
                     }
                 }));
@@ -197,7 +197,7 @@ function Anim() {
                     ...prevState,
                     //a2ol "m" wla a2ol eh
                     m:{
-                        Qk:null,
+                        Qk:"",
                         Vk: curr.output
                     }
                 }));
@@ -208,7 +208,7 @@ function Anim() {
                     ...prevState,
                     //a2ol "m" wla a2ol eh
                     m:{
-                        Qj:null,
+                        Qj:"",
                         Vj: curr.output
                     }
                 }));
