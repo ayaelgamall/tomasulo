@@ -226,32 +226,25 @@ function Anim() {
        loopOnLoadStore()
     }
 
-    function loopOnAdd()
-    {
-        var BusyAdd = add.filter(inst => inst.busy===1);
+   
+function loopOnAdd()
+{
+     //add: {tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
+    add= [{tag:"A1", Qj: 0, Qk:0, Vj:5,Vk:2 ,temp:12, busy: 0, op:"add",started: false, endTime :4, idx:0},
+          {tag:"A2", Qj: 0, Qk: 0, Vj:5,Vk:2 ,temp: 12, busy: 1, op:"add",started: false, endTime : 4, idx:1}]
+    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk===0 && inst.Qj===0 && !inst.started);
+    main =[{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:"A1", address:null, RD:1, RS:2, RT:3 },
+           {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:2, ExecEnd:5, WB:6,tag:"A2", address:null, RD:1, RS:2, RT:3 }]
+           console.log("busy="+BusyAdd)
 
+    BusyAdd.forEach(addRecord=> {
+        console.log("hi")
+        instruction = main[addRecord.idx];
+        console.log("will execute"+instruction)
+        //  execute add or sub or div or mul
+    });
 
-        BusyAdd.forEach(addRecord=> {
-            instruction = main[addRecord.idx];
-            if(!addRecord.started){        
-                if(addRecord.Qk!=0 && regReady(instruction.RS)){
-                    addRecord.Vk =  readReg(instruction.RS)
-                    addRecord.Qk = 0
-                }
-
-                if(addRecord.Qj!=0 && regReady(instruction.RT)){
-                    addRecord.Vj =  readReg(instruction.RT)
-                    addRecord.Qj = 0
-                }
-
-                if(addRecord.Qk==0 && addRecord.Qj==0){
-                    //  execute ba2a add or sub or div or mul
-                }
-            }
-        });
-
-    }
-
+}
     function loopOnMul(){
     }
 
@@ -277,16 +270,6 @@ function Anim() {
         //w update el tag bel station example: tag=M1
         //void
     }
-
-    function regReady(register){
-        //returns true register has val, false if no val yet (just tag)
-        //always call this before calling readReg
-    }
-
-    function readReg(register){
-        //returns value 
-    }
-
 
 
     // function add(n1, n2){
