@@ -117,8 +117,7 @@ function Anim() {
         writeResult();
     }
     function issue(){
-        // instruction=stringToInstruction(inst gdeeda)
-        // stationType=type(instruction)
+        // stationType=type(instruction.Instruction)
         // if(stationAvailable(stationType))
         // {
         //    putInStation(instruction,stationType)
@@ -248,7 +247,7 @@ function Anim() {
 
         if (instruction) {
             instruction.started=true;
-            instruction.temp=stringToInstruction(instruction.Instruction)
+            instruction.temp=exec(instruction.Instruction)
         }
 
         var found = main.find(x => x.tag === addRecord.tag);
