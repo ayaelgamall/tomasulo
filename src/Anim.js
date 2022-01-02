@@ -126,14 +126,15 @@ function Anim() {
         // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
-        setCycle(cycle + 1);
+         setCycle(cycle + 1);
+        startExecution();
         issue();
         //delay
-        startExecution();
+        writeResult();
         //delay
         endExecution();
         //delay
-        writeResult();
+
     }
     function issue(){
         let main2=main;
@@ -235,9 +236,11 @@ function Anim() {
             const inst = add[i]
             if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
 
-                console.log("will execute" + Object.values(add2[i]))
+                console.log("will execute" ,Object.values(add2[i]))
 
                 add2[i].started = true;
+
+                console.log("main2[idx]",main2[add[i].idx], " :idx",add[i].idx);
 
                 main2[add[i].idx].ExecStart = cycle
 
@@ -546,7 +549,7 @@ function Anim() {
         let add2=add;
         var tmp = instruction.split(",");
         let opcode = tmp[0].toLowerCase();
-        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}        // lets get the first reg
+        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}        // lets get the first reg
         const R1 = getRegNo(tmp[1]);
         const R2 = getRegNo(tmp[2]);
         const R3 = getRegNo(tmp[3]);
@@ -577,7 +580,7 @@ function Anim() {
         var tmp = instruction.split(',');
         let opcode = tmp[0].toLowerCase();
 
-        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}
+        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}
         // lets get the first reg
         const R1 = getRegNo(tmp[1]);
         const R2 = getRegNo(tmp[2]);
