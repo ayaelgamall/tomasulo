@@ -83,7 +83,7 @@ function Anim() {
     function getInitialStateStore() {
         let res=[];
         for (let i = 1; i <= 3; i++) {
-            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:""});
+            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:"",started: false,temp:""});
         }
         return res;
     }
@@ -97,17 +97,17 @@ function Anim() {
 
     function getInitialState(a) {
         return [
-            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
-            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
-            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
+            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
             ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
     }
     function getInitialStateLoad() {
-        return [{tag: "L1", Address: "", busy: "", idx: ""},
-            {tag: "L2", Address: "", busy: "", idx: ""},
-            {tag: "L3",Address: "",busy: "",idx: ""}];
+        return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
     }
     function doCycle() {
         cycle++;
