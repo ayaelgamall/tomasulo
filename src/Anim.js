@@ -55,15 +55,15 @@ function Anim() {
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
-    const [main, setMain] = useState(key.Instructions);
-    const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
+    // const [main, setMain] = useState(key.Instructions);
+    const [memory, setMemory] = useState([0,0,0,0,0,0,0,0,0,0]);
 
-//     const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
-//                                         {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
-//                                         // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
-//                                         {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null},
-//                                         {Instruction:"LD, 3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"L1", address:null}]
-// );
+    const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
+                                        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
+                                        // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
+                                        {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null},
+                                        {Instruction:"LD, 3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"L1", address:null}]
+);
 
     // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
@@ -115,10 +115,10 @@ function Anim() {
         // return [{tag:"M1",op:"mul", Vj:5, Vk:2 ,Qj: "", Qk:"", busy: 1,  idx:2,started: false, temp:""}]
     }
     function getInitialStateLoad() {
-        return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
-            {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
-            {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
-        // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
+        // return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
+        //     {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
+        //     {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
+        return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
         setCycle(cycle+1);
