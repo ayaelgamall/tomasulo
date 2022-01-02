@@ -146,8 +146,7 @@ function Anim() {
             inst.Issue=cycle;
             main2[instr]=inst;
             setMain(main2);
-            instr+=1; // next time we will fetch the instruction after
-
+            instr+=1;// next time we will fetch the instruction after
         }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
