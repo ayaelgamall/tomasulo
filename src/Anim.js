@@ -560,6 +560,125 @@ function Anim() {
             </TableContainer>
         )
     }
+    function StatesFront(flag) {
+        const table = flag==="add"?add:mul;
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">op</StyledTableHead>
+                            <StyledTableHead align="left">Vj</StyledTableHead>
+                            <StyledTableHead align="left">Vk</StyledTableHead>
+                            <StyledTableHead align="left">Qj</StyledTableHead>
+                            <StyledTableHead align="left">Qk</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {table.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{row.op}</StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Vj}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Vk}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Qj}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Qk}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function loadFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table   aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Address</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {load.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function storeFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Address</StyledTableHead>
+                            <StyledTableHead align="left">V</StyledTableHead>
+                            <StyledTableHead align="left">Q</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {store.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
+                                <StyledTableCell align="left">{row.V}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Q}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function regFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Qi</StyledTableHead>
+                            <StyledTableHead align="left">Value</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {reg.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Qi}</StyledTableCell>
+                                <StyledTableCell align="left">{row.val}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
 
     return (
         <div>
@@ -581,8 +700,29 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        doCycle();
+                                    }}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                    Next
+                                </Button>
+
+                            </Box>
+                                <br/>
+                            </React.Fragment>
+                            <React.Fragment>
                                 <React.Fragment>
                                     {InstructionsFront()}
+                                    <br/><br/>
+                                    {StatesFront("add")}<br/><br/>
+                                    {StatesFront("mul")}<br/><br/>
+                                    {loadFront()}<br/><br/>
+                                    {storeFront()}<br/><br/>
+                                    {regFront()}
                                 </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -595,15 +735,6 @@ function Anim() {
                                         sx={{ mt: 3, ml: 1 }}
                                     >
                                         Test
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            doCycle();
-                                        }}
-                                        sx={{ mt: 3, ml: 1 }}
-                                    >
-                                        Next
                                     </Button>
                                 </Box>
 
