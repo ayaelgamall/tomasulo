@@ -62,7 +62,7 @@ function Anim() {
 
     //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
     const [add, setAdd] = useState(getInitialState("A"));
-
+    
     //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
     const [mul, setMul] = useState(getInitialState("M"));
 
@@ -73,47 +73,44 @@ function Anim() {
     // reg: [{Qi= , val= }]
     const [reg, setReg] = useState(getInitialStateReg());
 
-    const latency = key.latency;
+    const latency=key.latency;
     // console.log("here")
     const [cycle, setCycle] = useState(0);
-    let cont = true;
-    let inst = 0;//user
-    let write = 0;
+    let cont =true;
+    let inst=0;//user
+    let write=0;
 
     function getInitialStateStore() {
-        let res = [];
+        let res=[];
         for (let i = 1; i <= 3; i++) {
-            res.push({tag: "S" + i, Address: "", V: "", Q: "", busy: "", started: false, temp: ""});
+            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:"",started: false,temp:""});
         }
         return res;
     }
-
     function getInitialStateReg() {
-        let res = [];
+        let res=[];
         for (let i = 0; i < 32; i++) {
-            res.push({tag: "F" + i, Qi: "", val: ""});
+            res.push({tag:"F"+i,Qi:"",val:""});
         }
         return res;
     }
 
     function getInitialState(a) {
         return [
-            {tag: {a} + "1", op: "", Vj: "", Vk: "", Qj: "", Qk: "", busy: "", idx: "", started: false, temp: ""},
-            {tag: {a} + "2", op: "", Vj: "", Vk: "", Qj: "", Qk: "", busy: "", idx: "", started: false, temp: ""},
-            {tag: {a} + "3", op: "", Vj: "", Vk: "", Qj: "", Qk: "", busy: "", idx: "", started: false, temp: ""},
-        ];
+            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
     }
-
     function getInitialStateLoad() {
-        return [{tag: "L1", Address: "", busy: "", idx: "", started: false, temp: ""},
-            {tag: "L2", Address: "", busy: "", idx: "", started: false, temp: ""},
-            {tag: "L3", Address: "", busy: "", idx: "", started: false, temp: ""}];
+        return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
     }
-
     function doCycle() {
-        setCycle(cycle + 1);
+        setCycle(cycle+1);
         issue();
         //delay
         startExecution();
@@ -122,8 +119,7 @@ function Anim() {
         //delay
         writeResult();
     }
-
-    function issue() {
+    function issue(){
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
         // if(stationAvailable(stationType))
@@ -133,53 +129,69 @@ function Anim() {
 
     }
 
-    function loopOnAdd() {
-
-        var currCycle = 3
-        var addLatency = 2
+    function loopOnAdd()
+    {}
+    function loopOnLoad()
+    {
+    }
+    function loopOnStore()
+    {
+    }
+    function loopOnAdd()
+    {
+        
+        var currCycle=3
+        var addLatency=2
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
 
-        var BusyAdd = add.filter(inst => inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started);
-        console.log(add)
-        let add2 = add;
-        let main2 = main;
 
-        for (let i = 0; i < add.length; i++) {
-            const inst = add[i]
-            if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
+    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
+    console.log(add)
+    let add2=add;
+    let main2=main;
 
-                console.log("will execute" + Object.values(add2[i]))
-
-                add2[i].started = true;
-
-                main2[add[i].idx].ExecStart = currCycle
-                // main2[add[i].idx].ExecEnd=currCycle+addLatency
-                add2[i].temp = exec(main2[add[i].idx].Instruction, add2[i].Vj, add2[i].Vk)
-            }
+    for(let i=0;i<add.length;i++){
+        const inst=add[i]
+        if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+        {
+        
+            console.log("will execute"+Object.values(add2[i]))
+            
+            add2[i].started=true;
+            
+            main2[add[i].idx].ExecStart=currCycle
+            // main2[add[i].idx].ExecEnd=currCycle+addLatency
+            add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
         }
-
-        setAdd(add2);
-        setMain(main2);
-        console.log(main)
-        console.log(add)
+    }
+       
+    setAdd(add2);
+    setMain(main2);
+    console.log(main)
+    console.log(add)
 
     }
+    function loopOnMul(){
+    }
 
-    function startExecution() {
+    function loopOnLoadStore(){
+
+    }
+    function startExecution(){
         //put tag in reg
     }
 
-    function endExecution() {
-        main.forEach(item => {
-            if (item.ExecStart !== null) {
-                if (item.endExecution === null) {
-                    const op = item.Instruction.substring(0, 3).toLowerCase();
-                    if (latency.op + item.ExecStart - 1 === cycle) {
+    function endExecution(){
+        main.forEach(item=>{
+            if(item.ExecStart!==null){
+                if(item.endExecution===null){
+                    const op= item.Instruction.substring(0,3).toLowerCase();
+                    if(latency.op+item.ExecStart-1===cycle){
                         setMain(prevState => ({
                             ...prevState,
-                            item: {
-                                ExecEnd: cycle
+                            item:{
+                                ExecEnd:cycle
                             }
                         }));
                     }
@@ -193,10 +205,10 @@ function Anim() {
     //iman
     //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
     //{{tag=M1,op=,...,idx=0},{},{}}
-    function writeResult() {
+    function  writeResult(){
         //1st check if any inst is done excuting but haven't WB yet 
         //i need to go/loop in order 3shan if conflict -> FIFO
-
+        
         //after finding an inst that wants to WB 
         /* loop over reg file, add and mul res stations, any tag replace w instruction o/p
         free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
@@ -204,7 +216,7 @@ function Anim() {
          */
 
         const waiting = main.filter(inst => inst.WB === "" && inst.ExecEnd !== "");
-        if (waiting.length > 0) {
+        if(waiting.length>0) {
             const curr = waiting[0]; //the inst that'll WB dlw2ty
             //update reg file, add and mul res stations
             reg.forEach(r => {
@@ -270,216 +282,179 @@ function Anim() {
                 }
             });
         }
-
+        
     }
-
-    function MUL(n1, n2) {
-        return Number(n1) * Number(n2)
-    }
-
-    function ADD(n1, n2) {
-        return Number(n1) + Number(n2)
-    }
-
-    function DIV(n1, n2) {
-        return Number(n1) / Number(n2)
-    }
-
-    function SUB(n1, n2) {
-        return Number(n1) - Number(n2)
-    }
-
-
-    function exec(s, Vj, Vk) {
-        const inst = s.split(',');
-        switch (inst[0]) {
-            case "add":
-                return ADD(Vj, Vk)
-            case "sub":
-                return SUB(Vj, Vk)
-            case "mul":
-                return MUL(Vj, Vk)
-            case "div":
-                return DIV(Vj, Vk)
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
+    
+    
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
+        switch(inst[0]){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
         }
     }
-
-    function startExecution() {
-        loopOnAdd()
-        loopOnMul()
-        loopOnLoadStore()
+    
+    function startExecution(){
+       loopOnAdd()
+       loopOnMul()
+       loopOnLoad()
+       loopOnStore()
     }
 
-    function MUL(n1, n2) {
-        return Number(n1) * Number(n2)
-    }
-
-    function ADD(n1, n2) {
-        console.log("ADDED" + (Number(n1) + Number(n2)));
-        return Number(n1) + Number(n2)
-    }
-
-    function DIV(n1, n2) {
-        return Number(n1) / Number(n2)
-    }
-
-    function SUB(n1, n2) {
-        return Number(n1) - Number(n2)
-    }
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){ console.log("ADDED"+(Number(n1)+Number(n2)));  return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
 
 
-    function exec(s, Vj, Vk) {
-        const inst = s.split(',');
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
         console.log(inst[0])
-        let X = inst[0].toLowerCase()
+        let X=inst[0].toLowerCase()
         console.log(X)
-        switch (X) {
-            case "add":
-                return ADD(Vj, Vk)
-            case "sub":
-                return SUB(Vj, Vk)
-            case "mul":
-                return MUL(Vj, Vk)
-            case "div":
-                return DIV(Vj, Vk)
+        switch(X){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
         }
+   
+
+    }
+
+    function type(instruction){
+        const op= instruction.substring(0,3).toLowerCase();
+        if(op==="add"|| op==="sub")return 1;
+        if(op==="mul"|| op==="div")return 2;
+        if(op==="str")return 3;
+        return 4;
+        // returns int 1 or 2 or 3 or 4 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(str) 4.ld
+    }
+    function stationAvailable(stationIdx){
+        const station=stationIdx===1?add:stationIdx===2?mul:stationIdx===3?store:load;
+        station.forEach(row=>{
+            if(row.busy==="")return true;
+        });
+        return false;
+        // masalan law stationIdx=1: yb2a check el (add/sub), 
+        // law stationIdx=2: yb2a check el (mul/div), 
+        // law stationIdx=3: yb2a check el (ld/str)
+        // returns boolean
+    }
+
+    function putInStation(instruction, stationIdx){
+        //w update el tag bel station example: tag=M1
+        //void
+    }
+
+    function regReady(register){
+        //returns true register has val, false if no val yet (just tag)
+        //always call this before calling readReg
+    }
+
+    function readReg(register){
+        //returns value 
+    }
 
 
-        function loopOnMul() {
-        }
+    // function load(address){
+    //     //ret ans
+    // }
+    //
+    // function store(val, address){
+    //     //void
+    // }
 
-        function loopOnLoadStore() {
+    function InstructionsFront() {
+        return(
+        <TableContainer component={Paper}>
+            <Table  aria-label="customized table">
+                <TableHead>
+                    <TableRow>
+                        <StyledTableHead> </StyledTableHead>
+                        <StyledTableHead align="left">Issue</StyledTableHead>
+                        <StyledTableHead align="left">Execute</StyledTableHead>
+                        <StyledTableHead align="left">Write Result</StyledTableHead>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {main.map((row) => (
+                        <StyledTableRow >
+                            <StyledTableCell scope="row">
+                                {row.Instruction}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">{row.Issue}</StyledTableCell>
+                            <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                            <StyledTableCell align="right">{row.WB}</StyledTableCell>
+                        </StyledTableRow>))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+        )
+    }
 
-        }
-
-        function type(instruction) {
-            const op = instruction.substring(0, 3).toLowerCase();
-            if (op === "add" || op === "sub") return 1;
-            if (op === "mul" || op === "div") return 2;
-            if (op === "str") return 3;
-            return 4;
-            // returns int 1 or 2 or 3 or 4 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(str) 4.ld
-        }
-
-        function stationAvailable(stationIdx) {
-            const station = stationIdx === 1 ? add : stationIdx === 2 ? mul : stationIdx === 3 ? store : load;
-            station.forEach(row => {
-                if (row.busy === "") return true;
-            });
-            return false;
-            // masalan law stationIdx=1: yb2a check el (add/sub),
-            // law stationIdx=2: yb2a check el (mul/div),
-            // law stationIdx=3: yb2a check el (ld/str)
-            // returns boolean
-        }
-
-        function putInStation(instruction, stationIdx) {
-            //w update el tag bel station example: tag=M1
-            //void
-        }
-
-        function regReady(register) {
-            //returns true register has val, false if no val yet (just tag)
-            //always call this before calling readReg
-        }
-
-        function readReg(register) {
-            //returns value
-        }
+    return (
+        <div>
 
 
-        // function load(address){
-        //     //ret ans
-        // }
-        //
-        // function store(val, address){
-        //     //void
-        // }
-
-        function InstructionsFront() {
-            return (
-                <TableContainer component={Paper}>
-                    <Table aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableHead> </StyledTableHead>
-                                <StyledTableHead align="left">Issue</StyledTableHead>
-                                <StyledTableHead align="left">Execute</StyledTableHead>
-                                <StyledTableHead align="left">Write Result</StyledTableHead>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {main.map((row) => (
-                                <StyledTableRow>
-                                    <StyledTableCell scope="row">
-                                        {row.Instruction}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right">{row.Issue}</StyledTableCell>
-                                    <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
-                                    <StyledTableCell align="right">{row.WB}</StyledTableCell>
-                                </StyledTableRow>))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            )
-        }
-
-        return (
-            <div>
-
-
-                <div
-                    // className={classes.pageHeader}
-                    // style={{
-                    //     backgroundImage: "url(" + image + ")",
-                    //     backgroundSize: "cover",
-                    //     backgroundPosition: "top center",
-                    // }}
-                >
+            <div
+                // className={classes.pageHeader}
+                // style={{
+                //     backgroundImage: "url(" + image + ")",
+                //     backgroundSize: "cover",
+                //     backgroundPosition: "top center",
+                // }}
+            >
                     <ThemeProvider theme={theme}>
-                        <CssBaseline/>
-                        <Container component="main" sx={{mb: 4}}>
-                            <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                                <Typography component="h1" variant="h4" align="center">
-                                    Cycle : {cycle}
-                                </Typography>
+                        <CssBaseline />
+                    <Container component="main"  sx={{ mb: 4 }}>
+                        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                            <Typography component="h1" variant="h4" align="center">
+                                Cycle : {cycle}
+                            </Typography>
+                            <React.Fragment>
                                 <React.Fragment>
-                                    <React.Fragment>
-                                        {InstructionsFront()}
-                                    </React.Fragment>
-
-                                    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                loopOnAdd();
-                                            }}
-                                            sx={{mt: 3, ml: 1}}
-                                        >
-                                            Test
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                doCycle();
-                                            }}
-                                            sx={{mt: 3, ml: 1}}
-                                        >
-                                            Next
-                                        </Button>
-                                    </Box>
-
-
+                                    {InstructionsFront()}
                                 </React.Fragment>
-                            </Paper>
-                        </Container>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                           loopOnAdd();
+                                        }}
+                                        sx={{ mt: 3, ml: 1 }}
+                                    >
+                                        Test
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            doCycle();
+                                        }}
+                                        sx={{ mt: 3, ml: 1 }}
+                                    >
+                                        Next
+                                    </Button>
+                                </Box>
+
+
+                            </React.Fragment>
+                        </Paper>
+                    </Container>
 
                     </ThemeProvider>
 
-                </div>
             </div>
-        )
-    }
+        </div>
+    )
 }
+
 export default Anim;
 
