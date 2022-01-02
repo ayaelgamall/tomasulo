@@ -267,9 +267,7 @@ function Anim() {
     }
 
     
-    function startExecution(){
-        //put tag in reg
-    }
+  
 
     function endExecution(){
         main.forEach(item=>{
@@ -378,16 +376,14 @@ function Anim() {
     function DIV(n1,n2){return Number(n1)/Number(n2)}
     function SUB(n1,n2){return Number(n1)-Number(n2)}
     function LD(address){return memory[address]}
+
     function STR(address, value){
         console.log("will change mem")
-
         let memory2=memory;
         memory2[address]=value;
         setMemory(memory2);
         console.log("memory after store")
-
         console.log(memory)
-        
     }
     
  
@@ -398,11 +394,6 @@ function Anim() {
        loopOnLoad()
        loopOnStore()
     }
-
-    function MUL(n1,n2){return Number(n1)*Number(n2)}
-    function ADD(n1,n2){ console.log("ADDED"+(Number(n1)+Number(n2)));  return Number(n1)+Number(n2)}
-    function DIV(n1,n2){return Number(n1)/Number(n2)}
-    function SUB(n1,n2){return Number(n1)-Number(n2)}
 
 
     function exec(s,Vj,Vk){
