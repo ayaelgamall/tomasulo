@@ -58,18 +58,24 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
-    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}]);
-    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+    // const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
 
-    //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
+    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
+    //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
+    //                                     // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
+    //                                     {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null} ]
+);
+
+    // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+
+    //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= ""}
     const [add, setAdd] = useState(getInitialState("A"));
     
-    //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx }
+    //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx:"" }
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
-
+    // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: ""}
     const [store, setStore] = useState(getInitialStateStore);
 
     // reg: [{Qi= , val= }]
@@ -89,9 +95,11 @@ function Anim() {
     function getInitialStateStore() {
         let res=[];
         for (let i = 1; i <= 3; i++) {
-            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:"",started: false,temp:""});
+            res.push({tag:"S"+i,Address:"",V:"",Q:"",busy:"",started: false, idx:""});
         }
         return res;
+        // return [{tag:"S1" ,Address:3, V:4, Q:"", busy:1, started: false, idx:2}]
+
     }
     function getInitialStateReg() {
         let res=[];
@@ -109,11 +117,13 @@ function Anim() {
             ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
+        // return [{tag:"M1",op:"mul", Vj:5, Vk:2 ,Qj: "", Qk:"", busy: 1,  idx:2,started: false, temp:""}]
     }
     function getInitialStateLoad() {
         return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
             {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
             {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
+        // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
         setCycle(cycle+1);
@@ -135,25 +145,79 @@ function Anim() {
 
     }
 
-    function loopOnAdd()
-    {}
-    function loopOnLoad()
-    {
-    }
+ 
     function loopOnStore()
     {
+        // store: [ {tag:"S1" ,Address:3, V:4, Q:"", busy:1, started: false, temp:""}]
+
+        console.log("store")
+        console.log(store)
+
+        let store2=store;
+        let main2=main;
+
+        for(let i=0;i<store.length;i++){
+            const inst=store[i]
+            if(inst.busy===1 && !inst.started && inst.V!=="")
+            {
+            
+                 console.log("will do store ")
+                 console.log(store[i])
+                
+                store2[i].started=true;
+                
+                main2[store[i].idx].ExecStart=cycle
+
+                exec(main2[store[i].idx].Instruction,inst.Address,inst.V)
+            }
+        }
+        
+        setStore(store2);
+        setMain(main2);
+        console.log("main after store")
+        console.log(main)
+        console.log("store after change")
+        console.log(store)
+    }
+    function loopOnLoad()
+    {
+        console.log("load")
+        console.log(load)
+
+        let load2=load;
+        let main2=main;
+
+        for(let i=0;i<load.length;i++){
+            const inst=load[i]
+            if(inst.busy===1 && !inst.started && inst.V!=="")
+            {
+
+                 console.log("will do load ")
+                 console.log(load[i])
+
+                load2[i].started=true;
+
+                main2[load[i].idx].ExecStart=cycle
+                load2.temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
+                console.log("loaded")
+
+                console.log(load2.temp)
+            }
+        }
+
+        setLoad(load2);
+        setMain(main2);
+        console.log("main after load")
+        console.log(main)
+        console.log("load after change")
+        console.log(load2)
     }
     function loopOnAdd()
     {
-        
-        var currCycle=3
-        var addLatency=2
+
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
-
-
-    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
-    console.log(add)
+    console.log("add"+add)
     let add2=add;
     let main2=main;
 
@@ -166,27 +230,49 @@ function Anim() {
             
             add2[i].started=true;
             
-            main2[add[i].idx].ExecStart=currCycle
-            // main2[add[i].idx].ExecEnd=currCycle+addLatency
+            main2[add[i].idx].ExecStart=cycle
+
             add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
         }
     }
        
     setAdd(add2);
     setMain(main2);
-    console.log(main)
-    console.log(add)
+    console.log("main after change"+main)
+    console.log("add after change"+add)
 
     }
     function loopOnMul(){
+
+        // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
+        console.log("dakhal")
+        console.log("mul"+mul)
+        let mul2=mul;
+        let main2=main;
+
+        for(let i=0;i<mul.length;i++){
+            const inst=mul[i]
+            if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+            {
+
+                console.log("will execute "+Object.values(mul2[i]))
+
+                mul2[i].started=true;
+
+                mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
+            }
+        }
+        setMul(mul2);
+        setMain(main2);
+
+        console.log("main")
+        console.log(main)
+        console.log("mul after change")
+        console.log(mul)
     }
 
-    function loopOnLoadStore(){
 
-    }
-    function startExecution(){
-        //put tag in reg
-    }
+
 
     function endExecution(){
         main.forEach(item=>{
@@ -294,17 +380,18 @@ function Anim() {
     function ADD(n1,n2){return Number(n1)+Number(n2)}
     function DIV(n1,n2){return Number(n1)/Number(n2)}
     function SUB(n1,n2){return Number(n1)-Number(n2)}
-    
-    
-    function exec(s,Vj,Vk){
-        const inst=s.split(',');
-        switch(inst[0]){
-            case "add": return ADD(Vj,Vk)
-            case "sub": return SUB(Vj,Vk)
-            case "mul": return MUL(Vj,Vk)
-            case "div": return DIV(Vj,Vk)
-        }
+    function LD(address){return memory[address]}
+
+    function STR(address, value){
+        console.log("will change mem")
+        let memory2=memory;
+        memory2[address]=value;
+        setMemory(memory2);
+        console.log("memory after store")
+        console.log(memory)
     }
+    
+ 
     
     function startExecution(){
        loopOnAdd()
@@ -313,22 +400,19 @@ function Anim() {
        loopOnStore()
     }
 
-    function MUL(n1,n2){return Number(n1)*Number(n2)}
-    function ADD(n1,n2){ console.log("ADDED"+(Number(n1)+Number(n2)));  return Number(n1)+Number(n2)}
-    function DIV(n1,n2){return Number(n1)/Number(n2)}
-    function SUB(n1,n2){return Number(n1)-Number(n2)}
-
 
     function exec(s,Vj,Vk){
         const inst=s.split(',');
         console.log(inst[0])
         let X=inst[0].toLowerCase()
-        console.log(X)
+        console.log("X",X)
         switch(X){
             case "add": return ADD(Vj,Vk)
             case "sub": return SUB(Vj,Vk)
             case "mul": return MUL(Vj,Vk)
             case "div": return DIV(Vj,Vk)
+            case "str": return STR(Vj,Vk)
+            case "ld": return LD(Vj)
         }
    
 
@@ -379,7 +463,7 @@ function Anim() {
 
     function InstructionsFront() {
         return(
-        <TableContainer component={Paper} >
+        <TableContainer component={Paper}>
             <Table  aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -395,136 +479,13 @@ function Anim() {
                             <StyledTableCell scope="row">
                                 {row.Instruction}
                             </StyledTableCell>
-                            <StyledTableCell align="left">{row.Issue}</StyledTableCell>
-                            {row.ExecStart!=="" &&
-                            <StyledTableCell align="left">{row.ExecStart} ... {row.ExecEnd}</StyledTableCell>}
-                            {row.ExecStart==="" &&
-                            <StyledTableCell align="left"></StyledTableCell>}
-                            <StyledTableCell align="left">{row.WB}</StyledTableCell>
+                            <StyledTableCell align="right">{row.Issue}</StyledTableCell>
+                            <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                            <StyledTableCell align="right">{row.WB}</StyledTableCell>
                         </StyledTableRow>))}
                 </TableBody>
             </Table>
         </TableContainer>
-        )
-    }
-
-    function StatesFront(flag) {
-        const table = flag==="add"?add:mul;
-        return(
-            <TableContainer component={Paper}>
-                <Table  aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">op</StyledTableHead>
-                            <StyledTableHead align="left">Vj</StyledTableHead>
-                            <StyledTableHead align="left">Vk</StyledTableHead>
-                            <StyledTableHead align="left">Qj</StyledTableHead>
-                            <StyledTableHead align="left">Qk</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {table.map((row) => (
-                            <StyledTableRow >
-                                <StyledTableCell scope="row">
-                                    {row.tag}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">{row.op}</StyledTableCell>
-
-                                <StyledTableCell align="left">{row.Vj}</StyledTableCell>
-                                <StyledTableCell align="left">{row.Vk}</StyledTableCell>
-                                <StyledTableCell align="left">{row.Qj}</StyledTableCell>
-                                <StyledTableCell align="left">{row.Qk}</StyledTableCell>
-                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
-                            </StyledTableRow>))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )
-    }
-
-    function loadFront() {
-        return(
-            <TableContainer component={Paper}>
-                <Table   aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Address</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {load.map((row) => (
-                            <StyledTableRow >
-                                <StyledTableCell scope="row">
-                                    {row.tag}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
-                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
-                            </StyledTableRow>))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )
-    }
-
-    function storeFront() {
-        return(
-            <TableContainer component={Paper}>
-                <Table  aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Address</StyledTableHead>
-                            <StyledTableHead align="left">V</StyledTableHead>
-                            <StyledTableHead align="left">Q</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {store.map((row) => (
-                            <StyledTableRow >
-                                <StyledTableCell scope="row">
-                                    {row.tag}
-                                </StyledTableCell>
-
-                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
-                                <StyledTableCell align="left">{row.V}</StyledTableCell>
-                                <StyledTableCell align="left">{row.Q}</StyledTableCell>
-                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
-                            </StyledTableRow>))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )
-    }
-
-    function regFront() {
-        return(
-            <TableContainer component={Paper}>
-                <Table  aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Qi</StyledTableHead>
-                            <StyledTableHead align="left">Value</StyledTableHead>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {reg.map((row) => (
-                            <StyledTableRow >
-                                <StyledTableCell scope="row">
-                                    {row.tag}
-                                </StyledTableCell>
-
-                                <StyledTableCell align="left">{row.Qi}</StyledTableCell>
-                                <StyledTableCell align="left">{row.val}</StyledTableCell>
-                            </StyledTableRow>))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
         )
     }
 
@@ -550,19 +511,14 @@ function Anim() {
                             <React.Fragment>
                                 <React.Fragment>
                                     {InstructionsFront()}
-                                    <br/><br/>
-                                    {StatesFront("add")}<br/><br/>
-                                    {StatesFront("mul")}<br/><br/>
-                                    {loadFront()}<br/><br/>
-                                    {storeFront()}<br/><br/>
-                                    {regFront()}
                                 </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button
                                         variant="contained"
                                         onClick={() => {
-                                           loopOnAdd();
+                                            console.log("hi");
+                                           loopOnLoad();
                                         }}
                                         sx={{ mt: 3, ml: 1 }}
                                     >
@@ -592,4 +548,3 @@ function Anim() {
 }
 
 export default Anim;
-
