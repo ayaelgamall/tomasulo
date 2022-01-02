@@ -83,7 +83,7 @@ function Anim() {
     const [reg, setReg] = useState(getInitialStateReg());
 
     const latency=key.latency;
-    // console.log("here")
+    // //console.log("here")
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
     //user
@@ -138,19 +138,22 @@ function Anim() {
 
     }
     function issue(){
-        console.log(" instr to issue:",instr)
+        //console.log(" instr to issue:",instr)
+        if(instr===main.length){
+            return;
+        }
         let main2=main;
         const inst= main2[instr];
         const stationidx =type(inst.Instruction);
         const tagIdx = stationAvailable(stationidx);
-        console.log(tagIdx);
+
         if(tagIdx!==-1){
             putInStation(inst.Instruction , stationidx , tagIdx); // we will put the instruction in the reservation station
             inst.Issue=cycle;
             main2[instr]=inst;
             setMain(main2);
             instr=instr+1; // next time we will fetch the instruction after
-            console.log(instr," instno")
+            //console.log(instr," instno")
         }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
@@ -165,8 +168,8 @@ function Anim() {
     function loopOnStore() {
         // store: [ {tag:"S1" ,Address:3, V:4, Q:"", busy:1, started: false, temp:""}]
 
-        console.log("store")
-        console.log(store)
+        //console.log("store")
+        //console.log(store)
 
         let store2 = store;
         let main2 = main;
@@ -175,8 +178,8 @@ function Anim() {
             const inst = store[i]
             if (inst.busy === 1 && !inst.started && inst.V !== "") {
 
-                console.log("will do store ")
-                console.log(store[i])
+                //console.log("will do store ")
+                //console.log(store[i])
 
                 store2[i].started = true;
 
@@ -188,14 +191,14 @@ function Anim() {
 
         setStore(store2);
         setMain(main2);
-        console.log("main after store")
-        console.log(main)
-        console.log("store after change")
-        console.log(store)
+        //console.log("main after store")
+        //console.log(main)
+        //console.log("store after change")
+        //console.log(store)
     }
     function loopOnLoad() {
-        console.log("load")
-        console.log(load)
+        //console.log("load")
+        //console.log(load)
 
         let load2=load;
         let main2=main;
@@ -205,32 +208,31 @@ function Anim() {
             if(inst.busy===1 && !inst.started && inst.V!=="")
             {
 
-                 console.log("will do load ")
-                 console.log(load[i])
+                 //console.log("will do load ")
+                 //console.log(load[i])
 
                 load2[i].started=true;
 
                 main2[load[i].idx].ExecStart=cycle
                 load2.temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
-                console.log("loaded")
+                //console.log("loaded")
 
-                console.log(load2.temp)
+                //console.log(load2.temp)
             }
         }
 
         setLoad(load2);
         setMain(main2);
-        console.log("main after load")
-        console.log(main)
-        console.log("load after change")
-        console.log(load2)
+        //console.log("main after load")
+        //console.log(main)
+        //console.log("load after change")
+        //console.log(load2)
     }
-    function loopOnAdd()
-    {
+    function loopOnAdd() {
 
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
-        console.log("add" + add)
+        //console.log("add" + add)
         let add2 = add;
         let main2 = main;
 
@@ -238,11 +240,11 @@ function Anim() {
             const inst = add[i]
             if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
 
-                console.log("will execute" ,Object.values(add2[i]))
+                //console.log("will execute" ,Object.values(add2[i]))
 
                 add2[i].started = true;
 
-                console.log("main2[idx]",main2[add[i].idx], " :idx",add[i].idx);
+                //console.log("main2[idx]",main2[add[i].idx], " :idx",add[i].idx);
 
                 main2[add[i].idx].ExecStart = cycle
 
@@ -252,15 +254,15 @@ function Anim() {
 
         setAdd(add2);
         setMain(main2);
-        console.log("main after change" + main)
-        console.log("add after change" + add)
+        //console.log("main after change" + main)
+        //console.log("add after change" + add)
 
     }
     function loopOnMul(){
 
         // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
-        console.log("dakhal")
-        console.log("mul"+mul)
+        //console.log("dakhal")
+        //console.log("mul"+mul)
         let mul2=mul;
         let main2=main;
 
@@ -269,20 +271,20 @@ function Anim() {
             if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
             {
 
-                console.log("will execute "+Object.values(mul2[i]))
+                console.log("will execute ", (mul2[i]))
 
                 mul2[i].started=true;
-
+                main2[mul[i].idx].ExecStart = cycle
                 mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
             }
         }
         setMul(mul2);
         setMain(main2);
 
-        console.log("main")
-        console.log(main)
-        console.log("mul after change")
-        console.log(mul)
+        //console.log("main")
+        //console.log(main)
+        //console.log("mul after change")
+        //console.log(mul)
     }
 
 
@@ -293,17 +295,20 @@ function Anim() {
     function endExecution() {
         let main2 = main;
 
-            for (let i = 0; i < main.length; i++) {
-                const inst = main2[i]
-                if (inst.ExecStart !== null) {
-                    if (inst.ExecEnd === null) {
-                        const op = inst.Instruction.substring(0, 3).toLowerCase();
-                        if (latency.op + inst.ExecStart - 1 === cycle) {
-                            main2[i].ExecEnd=cycle;
-                        }
+        for (let i = 0; i < main.length; i++) {
+            const inst = main2[i]
+            if (inst.ExecStart !== "") {
+                if (inst.ExecEnd === "") {
+
+                    let op = inst.Instruction.substring(0, 3).toLowerCase();
+                    if(op[0]==='l')op="ld";
+                    if (latency[op] + inst.ExecStart - 1 === cycle) {
+                        main2[i].ExecEnd=cycle;
                     }
+
                 }
-            }setMain(main2);
+            }
+        }setMain(main2);
     }
 
     //iman
@@ -319,10 +324,10 @@ function Anim() {
         write curr cycle in big table
          */
 
-        console.log("in WB method");
+        //console.log("in WB method");
 
         const waiting = main.filter(inst => inst.WB === "" && inst.ExecEnd !== "");
-        console.log(waiting);
+        //console.log(waiting);
         if (waiting.length > 0) {
             var output;
             var myIndex;
@@ -394,7 +399,7 @@ function Anim() {
                     break;
             }
             //update ADD
-            console.log("add", add)
+            //console.log("add", add)
             let add2 = add;
 
             for (let i = 0; i < add.length; i++) {
@@ -409,7 +414,7 @@ function Anim() {
                 }
             }
             setAdd(add2);
-            console.log("add after change", add)
+            //console.log("add after change", add)
 
             //update MUL
             let mul2 = mul;
@@ -426,8 +431,8 @@ function Anim() {
                 }
             }
             setMul(mul2);
-            console.log("mul after change")
-            console.log(mul)
+            //console.log("mul after change")
+            //console.log(mul)
 
             //update REG
             let reg2 = reg; //tag Qi val
@@ -439,8 +444,8 @@ function Anim() {
                 }
             }
             setReg(reg2);
-            console.log("reg after change")
-            console.log(reg)
+            //console.log("reg after change")
+            //console.log(reg)
 
             //update STORE
             let store2 = store;
@@ -452,14 +457,14 @@ function Anim() {
                 }
             }
             setStore(store2);
-            console.log("store after change")
-            console.log(store)
+            //console.log("store after change")
+            //console.log(store)
             //update MAIN
             let main2 = main;
             main2[myIndex].WB = cycle
             setMain(main2);
-            console.log("main after change")
-            console.log(main)
+            //console.log("main after change")
+            //console.log(main)
         }
     }
     function MUL(n1, n2) { return Number(n1) * Number(n2) }
@@ -469,12 +474,12 @@ function Anim() {
     function LD(address) { return memory[address] }
 
     function STR(address, value) {
-        console.log("will change mem")
+        //console.log("will change mem")
         let memory2 = memory;
         memory2[address] = value;
         setMemory(memory2);
-        console.log("memory after store")
-        console.log(memory)
+        //console.log("memory after store")
+        //console.log(memory)
     }
 
 
@@ -489,9 +494,9 @@ function Anim() {
 
     function exec(s, Vj, Vk) {
         const inst = s.split(',');
-        console.log(inst[0])
+        //console.log(inst[0])
         let X=inst[0].toLowerCase()
-        console.log("X",X)
+        //console.log("X",X)
         switch(X){
             case "add": return ADD(Vj,Vk)
             case "sub": return SUB(Vj,Vk)
@@ -514,9 +519,9 @@ function Anim() {
     }
     function stationAvailable(stationIdx){
         const station=stationIdx===1?add:stationIdx===2?mul:stationIdx===3?store:load;
-        let idx=0;
+
         for(let i=0;i<station.length;i++){
-            if(station[i].busy===""){
+            if(station[i].busy===""||station[i].busy===0){
                 return i+1;
             }
         }
@@ -555,26 +560,37 @@ function Anim() {
         const R1 = getRegNo(tmp[1]);
         const R2 = getRegNo(tmp[2]);
         const R3 = getRegNo(tmp[3]);
-        console.log(R1);
-        console.log(R2);
-        console.log(R3);
+        //console.log(R1);
+        //console.log(R2);
+        //console.log(R3);
         // to set the Qj , Vk
         if(regReady(R2)){
             a.Vj=readReg(R2);
+            if(a.Vj===""){
+                a.Vj=0;
+            }
             a.Qj="";
         }else {
             a.Qj=readReg(R2);
-            a.Vj=0;
+            a.Vj="";
         }
         if(regReady(R3)){
             a.Vk=readReg(R3);
+            if(a.Vk===""){
+                a.Vk=0;
+            }
             a.Qk="";
         }else {
             a.Qk=readReg(R3);
-            a.Vk=0;
+            a.Vk="";
         }
         add2[tagIdx-1]=a;
         writeReg(R1,a.tag);
+        let main2=main;
+        let inst=main[instr];
+        inst.tag=a.tag;
+        main2[instr]=inst;
+        setMain(main2);
         setAdd(add2);
     }
     function putInMul( instruction , tagIdx){
@@ -591,20 +607,31 @@ function Anim() {
         // to set the Qj , Vk
         if(regReady(R2)){
             a.Vj=readReg(R2);
+            if(a.Vj===""){
+                a.Vj=0;
+            }
             a.Qj="";
         }else {
             a.Qj=readReg(R2);
-            a.Vj=0;
+            a.Vj="";
         }
         if(regReady(R3)){
             a.Vk=readReg(R3);
+            if(a.Vk===""){
+                a.Vk=0;
+            }
             a.Qk="";
         }else {
             a.Qk=readReg(R3);
-            a.Vk=0;
+            a.Vk="";
         }
         mul2[tagIdx-1]=a;
         writeReg(R1,a.tag);
+        let main2=main;
+        let inst=main[instr];
+        inst.tag=a.tag;
+        main2[instr]=inst;
+        setMain(main2);
         setMul(mul2);
     }
     function putInStore(instruction , tagIdx){
@@ -615,12 +642,20 @@ function Anim() {
         const R1 = getRegNo(tmp[1]);
         if(regReady(R1)){
             s.V=readReg(R1);
+            if(s.Vj===""){
+                s.Vj=0;
+            }
             s.Q="";
         }else{
-            s.V=0;
+            s.V="";
             s.Q=readReg(R1);
         }
         store2[tagIdx-1]=s;
+        let main2=main;
+        let inst=main[instr];
+        inst.tag=s.tag;
+        main2[instr]=inst;
+        setMain(main2);
         setStore(store2);
     }
     function putInLoad(instruction , tagIdx){
@@ -629,13 +664,15 @@ function Anim() {
         let l ={tag: "L"+tagIdx, Address: "", busy:1, idx: instr,started: false,temp:""};
         load2[tagIdx-1]=l;
         writeReg(getRegNo(tmp[1]),l.tag);
+        let main2=main;
+        let inst=main2[instr];
+        inst.tag=l.tag;
+        main2[instr]=inst;
+        setMain(main2);
         setLoad(load2);
     }
     function regReady(register){
-        console.log(register, "input");
         const r = reg[Number(register)];
-        console.log(reg[Number(register)]," hi");
-       // console.log(r);
         if(r.Qi==="")return true; // wa have the register value ready
         return false;
         //returns true register has val, false if no val yet (just tag)
@@ -655,14 +692,6 @@ function Anim() {
         setReg(reg2);
     }
 
-
-    // function load(address){
-    //     //ret ans
-    // }
-    //
-    // function store(val, address){
-    //     //void
-    // }
 
     function InstructionsFront() {
         return (
@@ -857,21 +886,6 @@ function Anim() {
                                     {storeFront()}<br/><br/>
                                     {regFront()}
                                 </React.Fragment>
-
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            console.log("hi");
-                                            loopOnLoad();
-                                        }}
-                                        sx={{ mt: 3, ml: 1 }}
-                                    >
-                                        Test
-                                    </Button>
-                                </Box>
-
-
                             </React.Fragment>
                         </Paper>
                     </Container>
