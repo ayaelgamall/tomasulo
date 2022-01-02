@@ -210,7 +210,6 @@ function Anim() {
     function loopOnAdd()
     {
         
-        var currCycle=3
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
     console.log("add"+add)
@@ -226,8 +225,8 @@ function Anim() {
             
             add2[i].started=true;
             
-            main2[add[i].idx].ExecStart=currCycle
-            // main2[add[i].idx].ExecEnd=currCycle+addLatency
+            main2[add[i].idx].ExecStart=cycle
+
             add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
         }
     }
@@ -239,7 +238,7 @@ function Anim() {
 
     }
     function loopOnMul(){
-        var currCycle=3
+        
         // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
         console.log("dakhal")
         console.log("mul"+mul)
@@ -394,8 +393,8 @@ function Anim() {
  
     
     function startExecution(){
-    //    loopOnAdd()
-    //    loopOnMul()
+       loopOnAdd()
+       loopOnMul()
        loopOnLoad()
        loopOnStore()
     }
