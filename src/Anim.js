@@ -56,13 +56,14 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    // const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
+    const [memory, setMemory] = useState({1:"",2:0,3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
 
-    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
-    //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
-    //                                     // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
-    //                                     {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null} ]
-);
+//     const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
+//                                         {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
+//                                         // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
+//                                         {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null},
+//                                         {Instruction:"LD, 3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"L1", address:null}]
+// );
 
     // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
@@ -73,7 +74,7 @@ function Anim() {
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
-    // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: ""}
+    // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: "",temp=""}
     const [store, setStore] = useState(getInitialStateStore);
 
     // reg: [{Qi= , val= }]
@@ -104,20 +105,20 @@ function Anim() {
     }
 
     function getInitialState(a) {
-        // return [
-            // {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            // {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            // {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            // ];
+        return [
+            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
-        return [{tag:"M1",op:"mul", Vj:5, Vk:2 ,Qj: "", Qk:"", busy: 1,  idx:2,started: false, temp:""}]
+        // return [{tag:"M1",op:"mul", Vj:5, Vk:2 ,Qj: "", Qk:"", busy: 1,  idx:2,started: false, temp:""}]
     }
     function getInitialStateLoad() {
-        // return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
-        //     {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
-        //     {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
-        return 
+        return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L2", Address: "", busy: "", idx: "",started: false,temp:""},
+            {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
+        // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
         setCycle(cycle+1);
@@ -162,7 +163,7 @@ function Anim() {
                 
                 main2[store[i].idx].ExecStart=cycle
 
-                exec(main2[add[i].idx].Instruction,inst.Address,inst.V)
+                exec(main2[store[i].idx].Instruction,inst.Address,inst.V)
             }
         }
         
@@ -175,7 +176,36 @@ function Anim() {
     }
     function loopOnLoad()
     {
+        console.log("load")
+        console.log(load)
 
+        let load2=load;
+        let main2=main;
+
+        for(let i=0;i<load.length;i++){
+            const inst=load[i]
+            if(inst.busy===1 && !inst.started && inst.V!=="")
+            {
+            
+                 console.log("will do load ")
+                 console.log(load[i])
+                
+                load2[i].started=true;
+                
+                main2[load[i].idx].ExecStart=cycle
+                load2.temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
+                console.log("loaded")
+
+                console.log(load2.temp)
+            }
+        }
+        
+        setLoad(load2);
+        setMain(main2);
+        console.log("main after load")
+        console.log(main)
+        console.log("load after change")
+        console.log(load2)
     }
     function loopOnAdd()
     {
@@ -208,34 +238,34 @@ function Anim() {
     console.log("add after change"+add)
 
     }
-    // function loopOnMul(){
-    //     var currCycle=3
-    //     // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
-    //     console.log("dakhal")
-    //     console.log("mul"+mul)
-    //     let mul2=mul;
-    //     let main2=main;
+    function loopOnMul(){
+        var currCycle=3
+        // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
+        console.log("dakhal")
+        console.log("mul"+mul)
+        let mul2=mul;
+        let main2=main;
 
-    //     for(let i=0;i<mul.length;i++){
-    //         const inst=mul[i]
-    //         if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
-    //         {
+        for(let i=0;i<mul.length;i++){
+            const inst=mul[i]
+            if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+            {
             
-    //             console.log("will execute "+Object.values(mul2[i]))
+                console.log("will execute "+Object.values(mul2[i]))
                 
-    //             mul2[i].started=true;
+                mul2[i].started=true;
                 
-    //             mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
-    //         }
-    //     }
-    //     setMul(mul2);
-    //     setMain(main2);
+                mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
+            }
+        }
+        setMul(mul2);
+        setMain(main2);
 
-    //     console.log("main")
-    //     console.log(main)
-    //     console.log("mul after change")
-    //     console.log(mul)
-    // }
+        console.log("main")
+        console.log(main)
+        console.log("mul after change")
+        console.log(mul)
+    }
 
     
     function startExecution(){
@@ -348,7 +378,7 @@ function Anim() {
     function ADD(n1,n2){return Number(n1)+Number(n2)}
     function DIV(n1,n2){return Number(n1)/Number(n2)}
     function SUB(n1,n2){return Number(n1)-Number(n2)}
-    function LD(address){}
+    function LD(address){return memory[address]}
     function STR(address, value){
         console.log("will change mem")
 
@@ -387,7 +417,7 @@ function Anim() {
             case "mul": return MUL(Vj,Vk)
             case "div": return DIV(Vj,Vk)
             case "str": return STR(Vj,Vk)
-
+            case "ld": return LD(Vj)
         }
    
 
@@ -493,7 +523,7 @@ function Anim() {
                                         variant="contained"
                                         onClick={() => {
                                             console.log("hi");
-                                           loopOnStore();
+                                           loopOnLoad();
                                         }}
                                         sx={{ mt: 3, ml: 1 }}
                                     >
