@@ -91,7 +91,7 @@ function Anim() {
     let inst=0;//user
     let write=0;
     useEffect(()=>{
-        if(cycle===0)
+        if(cycle===0 && main.length!==0)
             doCycle();
     },[]);
 
