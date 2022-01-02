@@ -546,7 +546,7 @@ function Anim() {
         let add2=add;
         var tmp = instruction.split(",");
         let opcode = tmp[0].toLowerCase();
-        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}        // lets get the first reg
+        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}        // lets get the first reg
         const R1 = getRegNo(tmp[1]);
         const R2 = getRegNo(tmp[2]);
         const R3 = getRegNo(tmp[3]);
@@ -577,7 +577,7 @@ function Anim() {
         var tmp = instruction.split(',');
         let opcode = tmp[0].toLowerCase();
 
-        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}
+        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}
         // lets get the first reg
         const R1 = getRegNo(tmp[1]);
         const R2 = getRegNo(tmp[2]);
