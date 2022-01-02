@@ -52,8 +52,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
+var instr=0;
 function Anim() {
+
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
@@ -86,7 +87,8 @@ function Anim() {
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
     let doneCount =0; //number of done instructions
-    let inst=0;//user
+    // let inst=0;//user
+    //user
     let write=0;
     useEffect(()=>{
         if(cycle===0 && main.length!==0)
@@ -127,16 +129,31 @@ function Anim() {
         // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
-        setCycle(cycle + 1);
+         setCycle(cycle + 1);
+        startExecution();
         issue();
         //delay
-        startExecution();
+        writeResult();
         //delay
         endExecution();
         //delay
-        writeResult();
+
     }
-    function issue() {
+    function issue(){
+        console.log(" instr to issue:",instr)
+        let main2=main;
+        const inst= main2[instr];
+        const stationidx =type(inst.Instruction);
+        const tagIdx = stationAvailable(stationidx);
+        console.log(tagIdx);
+        if(tagIdx!==-1){
+            putInStation(inst.Instruction , stationidx , tagIdx); // we will put the instruction in the reservation station
+            inst.Issue=cycle;
+            main2[instr]=inst;
+            setMain(main2);
+            instr=instr+1; // next time we will fetch the instruction after
+            console.log(instr," instno")
+        }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
         // if(stationAvailable(stationType))
@@ -223,9 +240,11 @@ function Anim() {
             const inst = add[i]
             if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
 
-                console.log("will execute" + Object.values(add2[i]))
+                console.log("will execute" ,Object.values(add2[i]))
 
                 add2[i].started = true;
+
+                console.log("main2[idx]",main2[add[i].idx], " :idx",add[i].idx);
 
                 main2[add[i].idx].ExecStart = cycle
 
@@ -476,52 +495,169 @@ function Anim() {
     function exec(s, Vj, Vk) {
         const inst = s.split(',');
         console.log(inst[0])
-        let X = inst[0].toLowerCase()
-        console.log("X", X)
-        switch (X) {
-            case "add": return ADD(Vj, Vk)
-            case "sub": return SUB(Vj, Vk)
-            case "mul": return MUL(Vj, Vk)
-            case "div": return DIV(Vj, Vk)
-            case "str": return STR(Vj, Vk)
+        let X=inst[0].toLowerCase()
+        console.log("X",X)
+        switch(X){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
+            case "str": return STR(Vj,Vk)
             case "ld": return LD(Vj)
         }
-
+   
 
     }
 
-    function type(instruction) {
-        const op = instruction.substring(0, 3).toLowerCase();
-        if (op === "add" || op === "sub") return 1;
-        if (op === "mul" || op === "div") return 2;
-        if (op === "str") return 3;
+    function type(instruction){
+        const op= instruction.substring(0,3).toLowerCase();
+        if(op==="add"|| op==="sub")return 1;
+        if(op==="mul"|| op==="div")return 2;
+        if(op==="str")return 3;
         return 4;
         // returns int 1 or 2 or 3 or 4 heya which type mn el talata: 1.(add/sub) 2.(mul/div) 3.(str) 4.ld
     }
-    function stationAvailable(stationIdx) {
-        const station = stationIdx === 1 ? add : stationIdx === 2 ? mul : stationIdx === 3 ? store : load;
-        station.forEach(row => {
-            if (row.busy === "") return true;
-        });
-        return false;
+    function stationAvailable(stationIdx){
+        const station=stationIdx===1?add:stationIdx===2?mul:stationIdx===3?store:load;
+        let idx=0;
+        for(let i=0;i<station.length;i++){
+            if(station[i].busy===""){
+                return i+1;
+            }
+        }
+        return -1;
         // masalan law stationIdx=1: yb2a check el (add/sub), 
         // law stationIdx=2: yb2a check el (mul/div), 
         // law stationIdx=3: yb2a check el (ld/str)
         // returns boolean
     }
-
-    function putInStation(instruction, stationIdx) {
+    function putInStation(instruction, stationIdx , tagIdx){
         //w update el tag bel station example: tag=M1
         //void
+     if(stationIdx===3){ // store
+          putInStore(instruction , tagIdx);
+      }else if (stationIdx===4){ //load
+          putInLoad(instruction , tagIdx);
+      }else if (stationIdx===2){
+          putInMul(instruction , tagIdx);
+      }else{
+          putInAdd(instruction , tagIdx);
+      }
     }
+    function getRegNo(register){ // takes as an input R123 return 123
+        var arr = (register+"").split(" ");
+        for (let i = 0; i < arr.length; i++) {
+            if(arr[i]!=="")
+                return arr[i].substring(1,arr[i].length);
+        }
+    }
+    function putInAdd(instruction , tagIdx){
+        // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
+        let add2=add;
+        var tmp = instruction.split(",");
+        let opcode = tmp[0].toLowerCase();
+        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}        // lets get the first reg
+        const R1 = getRegNo(tmp[1]);
+        const R2 = getRegNo(tmp[2]);
+        const R3 = getRegNo(tmp[3]);
+        console.log(R1);
+        console.log(R2);
+        console.log(R3);
+        // to set the Qj , Vk
+        if(regReady(R2)){
+            a.Vj=readReg(R2);
+            a.Qj="";
+        }else {
+            a.Qj=readReg(R2);
+            a.Vj=0;
+        }
+        if(regReady(R3)){
+            a.Vk=readReg(R3);
+            a.Qk="";
+        }else {
+            a.Qk=readReg(R3);
+            a.Vk=0;
+        }
+        add2[tagIdx-1]=a;
+        writeReg(R1,a.tag);
+        setAdd(add2);
+    }
+    function putInMul( instruction , tagIdx){
+        let mul2=mul;
+        var tmp = instruction.split(',');
+        let opcode = tmp[0].toLowerCase();
 
-    function regReady(register) {
+        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}
+        // lets get the first reg
+        const R1 = getRegNo(tmp[1]);
+        const R2 = getRegNo(tmp[2]);
+        const R3 = getRegNo(tmp[3]);
+
+        // to set the Qj , Vk
+        if(regReady(R2)){
+            a.Vj=readReg(R2);
+            a.Qj="";
+        }else {
+            a.Qj=readReg(R2);
+            a.Vj=0;
+        }
+        if(regReady(R3)){
+            a.Vk=readReg(R3);
+            a.Qk="";
+        }else {
+            a.Qk=readReg(R3);
+            a.Vk=0;
+        }
+        mul2[tagIdx-1]=a;
+        writeReg(R1,a.tag);
+        setMul(mul2);
+    }
+    function putInStore(instruction , tagIdx){
+        // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: "",temp=""}
+        let store2= store;
+        var tmp = instruction.split(",");
+        let s ={tag:"S"+tagIdx,Address:tmp[2],V:"",Q:"",busy:1,started: false, idx:instr};
+        const R1 = getRegNo(tmp[1]);
+        if(regReady(R1)){
+            s.V=readReg(R1);
+            s.Q="";
+        }else{
+            s.V=0;
+            s.Q=readReg(R1);
+        }
+        store2[tagIdx-1]=s;
+        setStore(store2);
+    }
+    function putInLoad(instruction , tagIdx){
+        let load2 = load;
+        var tmp = instruction.split(',');
+        let l ={tag: "L"+tagIdx, Address: "", busy:1, idx: instr,started: false,temp:""};
+        load2[tagIdx-1]=l;
+        writeReg(getRegNo(tmp[1]),l.tag);
+        setLoad(load2);
+    }
+    function regReady(register){
+        console.log(register, "input");
+        const r = reg[Number(register)];
+        console.log(reg[Number(register)]," hi");
+       // console.log(r);
+        if(r.Qi==="")return true; // wa have the register value ready
+        return false;
         //returns true register has val, false if no val yet (just tag)
         //always call this before calling readReg
     }
-
-    function readReg(register) {
-        //returns value 
+    function readReg(register){
+        //returns value
+        const r = reg[register];
+        if(r.Qi==="")return r.val; // wa have the register value ready
+        return r.Qi;
+    }
+    function writeReg(register , tag){
+        let reg2=reg;
+        const r = reg[register];
+        r.Qi=tag;
+        reg2[register]=r;
+        setReg(reg2);
     }
 
 
