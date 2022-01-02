@@ -75,7 +75,7 @@ function Anim() {
 
     const latency=key.latency;
     // console.log("here")
-    let cycle =0;
+    const [cycle, setCycle] = useState(0);
     let cont =true;
     let inst=0;//user
     let write=0;
@@ -110,7 +110,7 @@ function Anim() {
             {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
     }
     function doCycle() {
-        cycle++;
+        setCycle(cycle+1);
         issue();
         //delay
         startExecution();
@@ -191,74 +191,74 @@ function Anim() {
         free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
         write curr cycle in big table
          */
-        
-        var waiting = main.filter(inst => inst.WB==="" && inst.ExecEnd!=="");
-        var curr = waiting[0]; //the inst that'll WB dlw2ty 
 
-        //update reg file, add and mul res stations
-        reg.forEach(r=> {
-            if(r.Qi === curr.tag){ //TODO - CHECK reg structureee
-                //inst output hykon feen???
-                //r.val=curr.output; 
-                setReg(prevState => ({
-                    ...prevState,
-                    //a2ol "r" wla a2ol eh
-                    r:{
-                        val:curr.output,
-                        Qi:""
-                    }
-                }));
-            }
-        });
-        add.forEach(a=> {
-            if(a.Qk === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "a" wla a2ol eh
-                    a:{
-                        Qk:"",
-                        Vk: curr.output
-                    }
-                }));
-            }
-            if(a.Qj === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "a" wla a2ol eh
-                    a:{
-                        Qj:"",
-                        Vj: curr.output
-                    }
-                }));
-            }
-        });
-        mul.forEach(m=> {
-            if(m.Qk === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "m" wla a2ol eh
-                    m:{
-                        Qk:"",
-                        Vk: curr.output
-                    }
-                }));
-            }
-            if(m.Qj === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "m" wla a2ol eh
-                    m:{
-                        Qj:"",
-                        Vj: curr.output
-                    }
-                }));
-            }
-        });
-
+        const waiting = main.filter(inst => inst.WB === "" && inst.ExecEnd !== "");
+        if(waiting.length>0) {
+            const curr = waiting[0]; //the inst that'll WB dlw2ty
+            //update reg file, add and mul res stations
+            reg.forEach(r => {
+                if (r.Qi === curr.tag) { //TODO - CHECK reg structureee
+                    //inst output hykon feen???
+                    //r.val=curr.output;
+                    setReg(prevState => ({
+                        ...prevState,
+                        //a2ol "r" wla a2ol eh
+                        r: {
+                            val: curr.output,
+                            Qi: ""
+                        }
+                    }));
+                }
+            });
+            add.forEach(a => {
+                if (a.Qk === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "a" wla a2ol eh
+                        a: {
+                            Qk: "",
+                            Vk: curr.output
+                        }
+                    }));
+                }
+                if (a.Qj === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "a" wla a2ol eh
+                        a: {
+                            Qj: "",
+                            Vj: curr.output
+                        }
+                    }));
+                }
+            });
+            mul.forEach(m => {
+                if (m.Qk === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "m" wla a2ol eh
+                        m: {
+                            Qk: "",
+                            Vk: curr.output
+                        }
+                    }));
+                }
+                if (m.Qj === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "m" wla a2ol eh
+                        m: {
+                            Qj: "",
+                            Vj: curr.output
+                        }
+                    }));
+                }
+            });
+        }
         
     }
 
@@ -341,7 +341,7 @@ function Anim() {
     function InstructionsFront() {
         return(
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 800 }} aria-label="customized table">
+            <Table  aria-label="customized table">
                 <TableHead>
                     <TableRow>
                         <StyledTableHead> </StyledTableHead>
