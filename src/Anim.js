@@ -52,8 +52,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
+var instr=0;
 function Anim() {
+
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
@@ -85,7 +86,7 @@ function Anim() {
     // console.log("here")
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
-    let instr=0;//user
+    //user
     let write=0;
     useEffect(()=>{
         if(cycle===0 && main.length!==0)
@@ -137,6 +138,7 @@ function Anim() {
 
     }
     function issue(){
+        console.log(" instr to issue:",instr)
         let main2=main;
         const inst= main2[instr];
         const stationidx =type(inst.Instruction);
@@ -147,8 +149,8 @@ function Anim() {
             inst.Issue=cycle;
             main2[instr]=inst;
             setMain(main2);
-            instr+=1; // next time we will fetch the instruction after
-
+            instr=instr+1; // next time we will fetch the instruction after
+            console.log(instr," instno")
         }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
