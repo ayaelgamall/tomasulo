@@ -37,7 +37,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableHead = styled(TableCell)(({ theme }) => ({
-    color: theme.palette.common.white,
+    color: "#FFFFFF",
     // backgroundColor: theme.palette.common.black,
     backgroundColor: "#005b64",
 
@@ -543,9 +543,9 @@ function Anim() {
                     <TableHead>
                         <TableRow>
                             <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="right">Issue</StyledTableHead>
-                            <StyledTableHead align="right">Execute</StyledTableHead>
-                            <StyledTableHead align="right">Write Result</StyledTableHead>
+                            <StyledTableHead align="left">Issue</StyledTableHead>
+                            <StyledTableHead align="left">Execute</StyledTableHead>
+                            <StyledTableHead align="left">Write Result</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -554,9 +554,9 @@ function Anim() {
                                 <StyledTableCell scope="row">
                                     {row.Instruction}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">{row.Issue}</StyledTableCell>
-                                <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
-                                <StyledTableCell align="right">{row.WB}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Issue}</StyledTableCell>
+                                <StyledTableCell align="left">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                                <StyledTableCell align="left">{row.WB}</StyledTableCell>
                             </StyledTableRow>))}
                     </TableBody>
                 </Table>
