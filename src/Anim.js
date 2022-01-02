@@ -75,7 +75,7 @@ function Anim() {
 
     const latency=key.latency;
     // console.log("here")
-    let cycle =0;
+    const [cycle, setCycle] = useState(0);
     let cont =true;
     let inst=0;//user
     let write=0;
@@ -110,7 +110,7 @@ function Anim() {
             {tag: "L3",Address: "",busy: "",idx: "",started: false,temp:""}];
     }
     function doCycle() {
-        cycle++;
+        setCycle(cycle+1);
         issue();
         //delay
         startExecution();
@@ -129,12 +129,20 @@ function Anim() {
 
     }
 
- function loopOnAdd()
-{
-    
-    var currCycle=3
-    var addLatency=2
-    // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
+    function loopOnAdd()
+    {}
+    function loopOnLoad()
+    {
+    }
+    function loopOnStore()
+    {
+    }
+    function loopOnAdd()
+    {
+        
+        var currCycle=3
+        var addLatency=2
+        // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
 
 
@@ -163,8 +171,13 @@ function Anim() {
     console.log(main)
     console.log(add)
 
-}
-  
+    }
+    function loopOnMul(){
+    }
+
+    function loopOnLoadStore(){
+
+    }
     function startExecution(){
         //put tag in reg
     }
@@ -201,74 +214,74 @@ function Anim() {
         free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
         write curr cycle in big table
          */
-        
-        var waiting = main.filter(inst => inst.WB==="" && inst.ExecEnd!=="");
-        var curr = waiting[0]; //the inst that'll WB dlw2ty 
 
-        //update reg file, add and mul res stations
-        reg.forEach(r=> {
-            if(r.Qi === curr.tag){ //TODO - CHECK reg structureee
-                //inst output hykon feen???
-                //r.val=curr.output; 
-                setReg(prevState => ({
-                    ...prevState,
-                    //a2ol "r" wla a2ol eh
-                    r:{
-                        val:curr.output,
-                        Qi:""
-                    }
-                }));
-            }
-        });
-        add.forEach(a=> {
-            if(a.Qk === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "a" wla a2ol eh
-                    a:{
-                        Qk:"",
-                        Vk: curr.output
-                    }
-                }));
-            }
-            if(a.Qj === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "a" wla a2ol eh
-                    a:{
-                        Qj:"",
-                        Vj: curr.output
-                    }
-                }));
-            }
-        });
-        mul.forEach(m=> {
-            if(m.Qk === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "m" wla a2ol eh
-                    m:{
-                        Qk:"",
-                        Vk: curr.output
-                    }
-                }));
-            }
-            if(m.Qj === curr.tag){ 
-                //inst output hykon feen???
-                setAdd(prevState => ({
-                    ...prevState,
-                    //a2ol "m" wla a2ol eh
-                    m:{
-                        Qj:"",
-                        Vj: curr.output
-                    }
-                }));
-            }
-        });
-
+        const waiting = main.filter(inst => inst.WB === "" && inst.ExecEnd !== "");
+        if(waiting.length>0) {
+            const curr = waiting[0]; //the inst that'll WB dlw2ty
+            //update reg file, add and mul res stations
+            reg.forEach(r => {
+                if (r.Qi === curr.tag) { //TODO - CHECK reg structureee
+                    //inst output hykon feen???
+                    //r.val=curr.output;
+                    setReg(prevState => ({
+                        ...prevState,
+                        //a2ol "r" wla a2ol eh
+                        r: {
+                            val: curr.output,
+                            Qi: ""
+                        }
+                    }));
+                }
+            });
+            add.forEach(a => {
+                if (a.Qk === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "a" wla a2ol eh
+                        a: {
+                            Qk: "",
+                            Vk: curr.output
+                        }
+                    }));
+                }
+                if (a.Qj === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "a" wla a2ol eh
+                        a: {
+                            Qj: "",
+                            Vj: curr.output
+                        }
+                    }));
+                }
+            });
+            mul.forEach(m => {
+                if (m.Qk === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "m" wla a2ol eh
+                        m: {
+                            Qk: "",
+                            Vk: curr.output
+                        }
+                    }));
+                }
+                if (m.Qj === curr.tag) {
+                    //inst output hykon feen???
+                    setAdd(prevState => ({
+                        ...prevState,
+                        //a2ol "m" wla a2ol eh
+                        m: {
+                            Qj: "",
+                            Vj: curr.output
+                        }
+                    }));
+                }
+            });
+        }
         
     }
     function MUL(n1,n2){return Number(n1)*Number(n2)}
@@ -290,7 +303,8 @@ function Anim() {
     function startExecution(){
        loopOnAdd()
        loopOnMul()
-       loopOnLoadStore()
+       loopOnLoad()
+       loopOnStore()
     }
 
     function MUL(n1,n2){return Number(n1)*Number(n2)}
@@ -311,11 +325,6 @@ function Anim() {
             case "div": return DIV(Vj,Vk)
         }
    
-
-    function loopOnMul(){
-    }
-
-    function loopOnLoadStore(){
 
     }
 
@@ -365,7 +374,7 @@ function Anim() {
     function InstructionsFront() {
         return(
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 800 }} aria-label="customized table">
+            <Table  aria-label="customized table">
                 <TableHead>
                     <TableRow>
                         <StyledTableHead> </StyledTableHead>
