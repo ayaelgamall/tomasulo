@@ -175,6 +175,21 @@ function Anim() {
     }
 
     function endExecution(){
+        main.forEach(item=>{
+            if(item.ExecStart!==null){
+                if(item.endExecution===null){
+                    const op= item.Instruction.substring(0,3).toLowerCase();
+                    if(latency.op+item.ExecStart-1===cycle){
+                        setMain(prevState => ({
+                            ...prevState,
+                            item:{
+                                ExecEnd:cycle
+                            }
+                        }));
+                    }
+                }
+            }
+        });
         // remove instructions from reservation station
         // dependent instructions are given result value of ended instructions
     }
