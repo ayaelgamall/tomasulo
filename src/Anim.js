@@ -84,14 +84,15 @@ function Anim() {
 
     const latency=key.latency;
     // //console.log("here")
-    const [cycle, setCycle] = useState(0);
+    const [cycleFront, setCycleFront] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
     let doneCount =0; //number of done instructions
     // let inst=0;//user
     //user
+    let cycle=0;
     let write=0;
     useEffect(()=>{
-        if(cycle===0 && main.length!==0)
+        if(cycleFront===0 && main.length!==0)
             doCycle();
     },[]);
 
@@ -129,7 +130,8 @@ function Anim() {
         // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
-         setCycle(cycle + 1);
+        cycle=cycleFront+1;
+         setCycleFront(cycleFront + 1);
         startExecution();
         issue();
         //delay
@@ -866,7 +868,7 @@ function Anim() {
                     <Container component="main" sx={{ mb: 4 }}>
                         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                             <Typography component="h1" variant="h4" align="center">
-                                Cycle : # {cycle}  {cont===false &&
+                                Cycle : # {cycleFront}  {cont===false &&
                                 <Typography component="h1" variant="h4" align="center"> Finished
                                 </Typography>}
                             </Typography>
