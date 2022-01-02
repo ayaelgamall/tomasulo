@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
+import NavigationIcon from '@mui/icons-material/Navigation';
+
 import { useState, useEffect } from 'react';
 import {
     styled,
@@ -22,6 +24,7 @@ import {
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { DeveloperBoardOffOutlined } from '@mui/icons-material';
+import {Fab} from "@material-ui/core";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
@@ -700,16 +703,15 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button
-                                    variant="contained"
-                                    onClick={() => {
-                                        doCycle();
-                                    }}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
+                            <Box style={{position: "fixed" ,bottom: 0
+                                ,right: 0,margin:20}} sx={{ display: 'flex', justifyContent: 'flex-end' ,position: "fixed" ,bottom: 0
+                                ,right: 0}} >
+                                <Fab onClick={() => {
+                                    doCycle();
+                                }} variant="extended" color="#005b64">
+                                    <NavigationIcon style={{ transform: 'rotate(90deg)'}} sx={{ mr: 1 }} />
                                     Next
-                                </Button>
+                                </Fab>
 
                             </Box>
                                 <br/>
