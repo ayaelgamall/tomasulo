@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -91,7 +90,6 @@ function Anim() {
     // let inst=0;//user
     //user
     let cycle=0;
-    let write=0;
     useEffect(()=>{
         if(cycleFront===0 && main.length!==0)
             doCycle();
@@ -158,7 +156,7 @@ function Anim() {
             main2[instr]=inst;
             setMain(main2);
             instr=instr+1; // next time we will fetch the instruction after
-            //console.log(instr," instno")
+            //console.log(instr," instNo")
         }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
@@ -322,7 +320,7 @@ function Anim() {
     //{{tag=M1,op=,...,idx=0},{},{}}
     function writeResult() {
         //1st check if any inst is done excuting but haven't WB yet 
-        //i need to go/loop in order 3shan if conflict -> FIFO
+        //I need to go/loop in order 3shan if conflict -> FIFO
 
         //after finding an inst that wants to WB 
         /* loop over reg file, add and mul res stations, any tag replace w instruction o/p
@@ -734,10 +732,10 @@ function Anim() {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Issue</StyledTableHead>
-                            <StyledTableHead align="left">Execute</StyledTableHead>
-                            <StyledTableHead align="left">Write Result</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}}> </StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Issue</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Execute</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}}  align="left">Write Result</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -750,7 +748,7 @@ function Anim() {
                                 {row.ExecStart!=="" &&
                                     <StyledTableCell align="left">{row.ExecStart} ... {row.ExecEnd}</StyledTableCell>}
                                 {row.ExecStart==="" &&
-                                    <StyledTableCell align="left"></StyledTableCell>}
+                                    <StyledTableCell align="left"> </StyledTableCell>}
                                 <StyledTableCell align="left">{row.WB}</StyledTableCell>
 
                             </StyledTableRow>))}
@@ -767,12 +765,12 @@ function Anim() {
                     <TableHead>
                         <TableRow>
                             <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">op</StyledTableHead>
-                            <StyledTableHead align="left">Vj</StyledTableHead>
-                            <StyledTableHead align="left">Vk</StyledTableHead>
-                            <StyledTableHead align="left">Qj</StyledTableHead>
-                            <StyledTableHead align="left">Qk</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">op</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Vj</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Vk</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Qj</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Qk</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -802,8 +800,8 @@ function Anim() {
                     <TableHead>
                         <TableRow>
                             <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Address</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -828,10 +826,10 @@ function Anim() {
                     <TableHead>
                         <TableRow>
                             <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Address</StyledTableHead>
-                            <StyledTableHead align="left">V</StyledTableHead>
-                            <StyledTableHead align="left">Q</StyledTableHead>
-                            <StyledTableHead align="left">busy</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">V</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Q</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -859,8 +857,8 @@ function Anim() {
                     <TableHead>
                         <TableRow>
                             <StyledTableHead> </StyledTableHead>
-                            <StyledTableHead align="left">Qi</StyledTableHead>
-                            <StyledTableHead align="left">Value</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Qi</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Value</StyledTableHead>
                         </TableRow>
                     </TableHead>
                     <TableBody>
