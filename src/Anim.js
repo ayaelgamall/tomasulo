@@ -86,6 +86,8 @@ function Anim() {
     // //console.log("here")
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
+    let doneCount =0; //number of done instructions
+    // let inst=0;//user
     //user
     let write=0;
     useEffect(()=>{
@@ -271,7 +273,7 @@ function Anim() {
             if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
             {
 
-                console.log("will execute ", (mul2[i]))
+               // console.log("will execute ", (mul2[i]))
 
                 mul2[i].started=true;
                 main2[mul[i].idx].ExecStart = cycle
@@ -464,7 +466,10 @@ function Anim() {
             main2[myIndex].WB = cycle
             setMain(main2);
             //console.log("main after change")
-            //console.log(main)
+           // console.log(main)
+            doneCount++;
+            if(doneCount === main.length) //if i'm done w my program
+                setCont(false);
         }
     }
     function MUL(n1, n2) { return Number(n1) * Number(n2) }
@@ -672,7 +677,10 @@ function Anim() {
         setLoad(load2);
     }
     function regReady(register){
+        console.log(register, "input");
         const r = reg[Number(register)];
+        console.log(reg[Number(register)]," hi");
+       // console.log(r);
         if(r.Qi==="")return true; // wa have the register value ready
         return false;
         //returns true register has val, false if no val yet (just tag)
