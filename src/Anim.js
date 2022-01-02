@@ -129,18 +129,14 @@ function Anim() {
 
     }
 
-    async function loopOnAdd()
+ function loopOnAdd()
 {
     
     var currCycle=3
     var addLatency=2
     // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
-    // await setAdd([{tag:"A1", Qj: "", Qk:"", Vj:5,Vk:2 ,temp:"", busy: 0, op:"add",started: false, endTime :""},
-    //              {tag:"A2", Qj: "", Qk: "", Vj:5,Vk:2 ,temp: "", busy: 1, op:"add",started: false, endTime : ""}])
-   
-    // await setMain([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
-    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}])
+
 
     var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
     console.log(add)
@@ -167,7 +163,6 @@ function Anim() {
     console.log(main)
     console.log(add)
 
-
 }
   
     function startExecution(){
@@ -175,6 +170,21 @@ function Anim() {
     }
 
     function endExecution(){
+        main.forEach(item=>{
+            if(item.ExecStart!==null){
+                if(item.endExecution===null){
+                    const op= item.Instruction.substring(0,3).toLowerCase();
+                    if(latency.op+item.ExecStart-1===cycle){
+                        setMain(prevState => ({
+                            ...prevState,
+                            item:{
+                                ExecEnd:cycle
+                            }
+                        }));
+                    }
+                }
+            }
+        });
         // remove instructions from reservation station
         // dependent instructions are given result value of ended instructions
     }
@@ -261,9 +271,23 @@ function Anim() {
         }
         
     }
-
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
     
-    function loopOnStations(){
+    
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
+        switch(inst[0]){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
+        }
+    }
+    
+    function startExecution(){
        loopOnAdd()
        loopOnMul()
        loopOnLoadStore()
@@ -286,7 +310,7 @@ function Anim() {
             case "mul": return MUL(Vj,Vk)
             case "div": return DIV(Vj,Vk)
         }
-    }
+   
 
     function loopOnMul(){
     }
