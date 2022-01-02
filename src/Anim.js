@@ -129,12 +129,20 @@ function Anim() {
 
     }
 
- function loopOnAdd()
-{
-    
-    var currCycle=3
-    var addLatency=2
-    // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
+    function loopOnAdd()
+    {}
+    function loopOnLoad()
+    {
+    }
+    function loopOnStore()
+    {
+    }
+    function loopOnAdd()
+    {
+        
+        var currCycle=3
+        var addLatency=2
+        // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
 
 
@@ -163,8 +171,13 @@ function Anim() {
     console.log(main)
     console.log(add)
 
-}
-  
+    }
+    function loopOnMul(){
+    }
+
+    function loopOnLoadStore(){
+
+    }
     function startExecution(){
         //put tag in reg
     }
@@ -275,7 +288,8 @@ function Anim() {
     function startExecution(){
        loopOnAdd()
        loopOnMul()
-       loopOnLoadStore()
+       loopOnLoad()
+       loopOnStore()
     }
 
     function MUL(n1,n2){return Number(n1)*Number(n2)}
@@ -296,11 +310,6 @@ function Anim() {
             case "div": return DIV(Vj,Vk)
         }
    
-
-    function loopOnMul(){
-    }
-
-    function loopOnLoadStore(){
 
     }
 
