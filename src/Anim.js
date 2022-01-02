@@ -747,8 +747,12 @@ function Anim() {
                                     {row.Instruction}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">{row.Issue}</StyledTableCell>
-                                <StyledTableCell align="left">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
+                                {row.ExecStart!=="" &&
+                                    <StyledTableCell align="left">{row.ExecStart} ... {row.ExecEnd}</StyledTableCell>}
+                                {row.ExecStart==="" &&
+                                    <StyledTableCell align="left"></StyledTableCell>}
                                 <StyledTableCell align="left">{row.WB}</StyledTableCell>
+
                             </StyledTableRow>))}
                     </TableBody>
                 </Table>
