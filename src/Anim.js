@@ -87,7 +87,7 @@ function Anim() {
     const latency=key.latency;
     // console.log("here")
     const [cycle, setCycle] = useState(0);
-    let cont =true;
+    const [cont, setCont] = useState(main.length!==0);
     let inst=0;//user
     let write=0;
     useEffect(()=>{
@@ -703,17 +703,18 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
+                                {cont &&
                             <Box style={{position: "fixed" ,bottom: 0
                                 ,right: 0,margin:20}} sx={{ display: 'flex', justifyContent: 'flex-end' ,position: "fixed" ,bottom: 0
                                 ,right: 0}} >
                                 <Fab onClick={() => {
                                     doCycle();
-                                }} variant="extended" color="#005b64">
+                                }} variant="extended" style={{backgroundColor: "#005b64",color:"white"}} >
                                     <NavigationIcon style={{ transform: 'rotate(90deg)'}} sx={{ mr: 1 }} />
                                     Next
                                 </Fab>
 
-                            </Box>
+                            </Box>}
                                 <br/>
                             </React.Fragment>
                             <React.Fragment>
