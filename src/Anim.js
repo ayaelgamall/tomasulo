@@ -52,8 +52,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
+var instr=0;
 function Anim() {
+
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
@@ -85,7 +86,7 @@ function Anim() {
     // console.log("here")
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
-    let instr=0;//user
+    //user
     let write=0;
     useEffect(()=>{
         if(cycle===0 && main.length!==0)
@@ -126,16 +127,18 @@ function Anim() {
         // return [{tag: "L1", Address: 2, busy: 1, idx: 3,started: false,temp:""}]
     }
     function doCycle() {
-        setCycle(cycle + 1);
+         setCycle(cycle + 1);
+        startExecution();
         issue();
         //delay
-        startExecution();
+        writeResult();
         //delay
         endExecution();
         //delay
-        writeResult();
+
     }
     function issue(){
+        console.log(" instr to issue:",instr)
         let main2=main;
         const inst= main2[instr];
         const stationidx =type(inst.Instruction);
@@ -146,7 +149,8 @@ function Anim() {
             inst.Issue=cycle;
             main2[instr]=inst;
             setMain(main2);
-            instr+=1;// next time we will fetch the instruction after
+            instr=instr+1; // next time we will fetch the instruction after
+            console.log(instr," instno")
         }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
@@ -234,9 +238,11 @@ function Anim() {
             const inst = add[i]
             if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
 
-                console.log("will execute" + Object.values(add2[i]))
+                console.log("will execute" ,Object.values(add2[i]))
 
                 add2[i].started = true;
+
+                console.log("main2[idx]",main2[add[i].idx], " :idx",add[i].idx);
 
                 main2[add[i].idx].ExecStart = cycle
 
