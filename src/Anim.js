@@ -261,9 +261,23 @@ function Anim() {
 
         
     }
-
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
     
-    function loopOnStations(){
+    
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
+        switch(inst[0]){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
+        }
+    }
+    
+    function startExecution(){
        loopOnAdd()
        loopOnMul()
        loopOnLoadStore()
@@ -286,7 +300,7 @@ function Anim() {
             case "mul": return MUL(Vj,Vk)
             case "div": return DIV(Vj,Vk)
         }
-    }
+   
 
     function loopOnMul(){
     }
