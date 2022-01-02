@@ -53,13 +53,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 var instr=0;
+var doneCount =0; //number of done instructions
+
 function Anim() {
 
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
+    const [memory, setMemory] = useState({1:"1.5",2:"0.5",3:"1",4:"2.5",5:"3.2",6:"0",7:"5.5",8:"6",9:"12.75",10:"22.22"});
 
     // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
     //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
@@ -86,7 +88,6 @@ function Anim() {
     // //console.log("here")
     const [cycleFront, setCycleFront] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
-    let doneCount =0; //number of done instructions
     // let inst=0;//user
     //user
     let cycle=0;
@@ -218,7 +219,7 @@ function Anim() {
                 load2[i].started=true;
 
                 main2[load[i].idx].ExecStart=cycle
-                load2.temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
+                load2[i].temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
                 //console.log("loaded")
 
                 //console.log(load2.temp)
@@ -306,7 +307,8 @@ function Anim() {
 
                     let op = inst.Instruction.substring(0, 3).toLowerCase();
                     if(op[0]==='l')op="ld";
-                    if (latency[op] + inst.ExecStart - 1 === cycle) {
+                   // console.log("latency  ",latency[op] ,"  .....    ", op, " cycle ", cycle , "Execstart ", inst.ExecStart);
+                    if (Number(latency[op]) + inst.ExecStart - 1 === cycle) {
                         main2[i].ExecEnd=cycle;
                     }
 
@@ -329,55 +331,55 @@ function Anim() {
          */
 
         //console.log("in WB method");
-
+        //console.log("load" , load);
         const waiting = main.filter(inst => inst.WB === "" && inst.ExecEnd !== "");
         //console.log(waiting);
         if (waiting.length > 0) {
             var output;
             var myIndex;
-            let add3,mul3,load3;
+            let add3,mul3,load3,store3;
             const curr = waiting[0]; //the inst that'll WB dlw2ty
             switch (curr.tag) {
                 case "A1":
                     output = add[0].temp;
                     myIndex = add[0].idx;
                     add3 =add;
-                    add3[0] = { tag: "A1", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    add3[0] = { tag: "A1", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setAdd(add3);
                     break;
                 case "A2":
                     output = add[1].temp;
                     myIndex = add[1].idx;
                     add3 =add;
-                    add3[1] = { tag: "A2", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    add3[1] = { tag: "A2", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setAdd(add3);
                     break;
                 case "A3":
                     output = add[2].temp;
                     myIndex = add[2].idx;
                     add3 =add;
-                    add3[2] = { tag: "A3", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    add3[2] = { tag: "A3", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setAdd(add3);
                     break;
                 case "M1":
                     output = mul[0].temp;
                     myIndex = mul[0].idx;
                     mul3 =mul;
-                    mul3[0] = { tag: "M1", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    mul3[0] = { tag: "M1", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setMul(mul3);
                     break;
                 case "M2":
                     output = mul[1].temp;
                     myIndex = mul[1].idx;
                     mul3 =mul;
-                    mul3[1] = { tag: "M2", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    mul3[1] = { tag: "M2", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setMul(mul3);
                     break;
                 case "M3":
                     output = mul[2].temp;
                     myIndex = mul[2].idx;
                     mul3 =mul;
-                    mul3[2] = { tag: "M3", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: 0, op: "", started: false, idx: "" };
+                    mul3[2] = { tag: "M3", Qj: "", Qk: "", Vj: "", Vk: "", temp: "", busy: "", op: "", started: false, idx: "" };
                     setMul(mul3);
                     break;
                 case "L1":
@@ -401,7 +403,30 @@ function Anim() {
                     load3[2] = { tag: "L3", Address: "", busy: "", idx: "", started: false, temp: "" };
                     setLoad(load3);
                     break;
+                case "S1":
+                    output = store[0].temp;
+                    myIndex = store[0].idx;
+                    store3 = store;
+                    store3[0] = { tag: "S1", Address: "", busy: "", idx: "", started: false, temp: "",V:"",Q:"" };
+                    setStore(store3);
+                    break;
+                case "S2":
+                    output = store[1].temp;
+                    myIndex = store[1].idx;
+                    store3 = store;
+                    store3[1] = { tag: "S2", Address: "", busy: "", idx: "", started: false, temp: "" ,V:"",Q:""};
+                    setStore(store3);
+                    break;
+                case "S3":
+                    output = store[2].temp;
+                    myIndex = store[2].idx;
+                    store3 = store;
+                    store3[2] = { tag: "S3", Address: "", busy: "", idx: "", started: false, temp: "",V:"",Q:"" };
+                    setStore(store3);
+                    break;
             }
+            //console.log("output",output);
+
             //update ADD
             //console.log("add", add)
             let add2 = add;
@@ -470,6 +495,7 @@ function Anim() {
             //console.log("main after change")
            // console.log(main)
             doneCount++;
+            console.log(doneCount);
             if(doneCount === main.length) //if i'm done w my program
                 setCont(false);
         }
@@ -650,8 +676,8 @@ function Anim() {
         const R1 = getRegNo(tmp[1]);
         if(regReady(R1)){
             s.V=readReg(R1);
-            if(s.Vj===""){
-                s.Vj=0;
+            if(s.V===""){
+                s.V=0;
             }
             s.Q="";
         }else{
@@ -669,7 +695,7 @@ function Anim() {
     function putInLoad(instruction , tagIdx){
         let load2 = load;
         var tmp = instruction.split(',');
-        let l ={tag: "L"+tagIdx, Address: "", busy:1, idx: instr,started: false,temp:""};
+        let l ={tag: "L"+tagIdx, Address: tmp[2], busy:1, idx: instr,started: false,temp:""};
         load2[tagIdx-1]=l;
         writeReg(getRegNo(tmp[1]),l.tag);
         let main2=main;
@@ -680,11 +706,9 @@ function Anim() {
         setLoad(load2);
     }
     function regReady(register){
-        console.log(register, "input");
         const r = reg[Number(register)];
-        console.log(reg[Number(register)]," hi");
        // console.log(r);
-        if(r.Qi==="")return true; // wa have the register value ready
+        if(r.Qi===""||r.Qi===0)return true; // wa have the register value ready
         return false;
         //returns true register has val, false if no val yet (just tag)
         //always call this before calling readReg
@@ -692,7 +716,7 @@ function Anim() {
     function readReg(register){
         //returns value
         const r = reg[register];
-        if(r.Qi==="")return r.val; // wa have the register value ready
+        if(r.Qi===""||r.Qi===0)return r.val; // wa have the register value ready
         return r.Qi;
     }
     function writeReg(register , tag){
