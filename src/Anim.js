@@ -448,4 +448,3 @@ function Anim() {
 }
 
 export default Anim;
-
