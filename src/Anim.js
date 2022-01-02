@@ -21,6 +21,7 @@ import {
     TableRow
 } from "@mui/material";
 import {useLocation} from "react-router-dom";
+import { DeveloperBoardOffOutlined } from '@mui/icons-material';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
@@ -55,6 +56,8 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
+    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
+    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}]);
     //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
     //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
@@ -98,6 +101,8 @@ function Anim() {
             {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
             {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: ""},
             ];
+        // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
+        //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
     }
     function getInitialStateLoad() {
         return [{tag: "L1", Address: "", busy: "", idx: ""},
@@ -124,21 +129,47 @@ function Anim() {
 
     }
 
-    function MUL(n1,n2){return Number(n1)*Number(n2)}
-function ADD(n1,n2){return Number(n1)+Number(n2)}
-function DIV(n1,n2){return Number(n1)/Number(n2)}
-function SUB(n1,n2){return Number(n1)-Number(n2)}
+    async function loopOnAdd()
+{
+    
+    var currCycle=3
+    var addLatency=2
+    // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
+    // await setAdd([{tag:"A1", Qj: "", Qk:"", Vj:5,Vk:2 ,temp:"", busy: 0, op:"add",started: false, endTime :""},
+    //              {tag:"A2", Qj: "", Qk: "", Vj:5,Vk:2 ,temp: "", busy: 1, op:"add",started: false, endTime : ""}])
+   
+    // await setMain([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
+    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}])
 
-function exec(s,Vj,Vk){
-    const inst=s.split(',');
-    switch(inst[0]){
-        case "add": return ADD(Vj,Vk)
-        case "sub": return SUB(Vj,Vk)
-        case "mul": return MUL(Vj,Vk)
-        case "div": return DIV(Vj,Vk)
+    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
+    console.log(add)
+    let add2=add;
+    let main2=main;
+
+    for(let i=0;i<add.length;i++){
+        const inst=add[i]
+        if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+        {
+        
+            console.log("will execute"+Object.values(add2[i]))
+            
+            add2[i].started=true;
+            
+            main2[add[i].idx].ExecStart=currCycle
+            // main2[add[i].idx].ExecEnd=currCycle+addLatency
+            add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
+        }
     }
+       
+    setAdd(add2);
+    setMain(main2);
+    console.log(main)
+    console.log(add)
+
+
 }
+  
     function startExecution(){
         //put tag in reg
     }
@@ -238,26 +269,23 @@ function exec(s,Vj,Vk){
        loopOnLoadStore()
     }
 
-    function loopOnAdd()
-    {
-    //     add.forEach(addRecord=> {
-    //         instruction=main[addRecord.idx];
-    //         if(!addRecord.started){        
-    //             if(addRecord.Qk!=0 && regReady(instruction.RS)){
-    //                 addRecord.Vk =  readReg(instruction.RS)
-    //                 addRecord.Qk = 0
-    //             }
+    function MUL(n1,n2){return Number(n1)*Number(n2)}
+    function ADD(n1,n2){ console.log("ADDED"+(Number(n1)+Number(n2)));  return Number(n1)+Number(n2)}
+    function DIV(n1,n2){return Number(n1)/Number(n2)}
+    function SUB(n1,n2){return Number(n1)-Number(n2)}
 
-    //             if(addRecord.Qj!=0 && regReady(instruction.RT)){
-    //                 addRecord.Vj =  readReg(instruction.RT)
-    //                 addRecord.Qj = 0
-    //             }
 
-    //             if(addRecord.Qk==0 && addRecord.Qj==0){
-    //                 //  execute ba2a add or sub or div or mul
-    //             }
-    //         }
-    //     });
+    function exec(s,Vj,Vk){
+        const inst=s.split(',');
+        console.log(inst[0])
+        let X=inst[0].toLowerCase()
+        console.log(X)
+        switch(X){
+            case "add": return ADD(Vj,Vk)
+            case "sub": return SUB(Vj,Vk)
+            case "mul": return MUL(Vj,Vk)
+            case "div": return DIV(Vj,Vk)
+        }
     }
 
     function loopOnMul(){
@@ -302,23 +330,6 @@ function exec(s,Vj,Vk){
     }
 
 
-
-    // function add(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function sub(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function mul(n1, n2){
-    //     //ret ans
-    // }
-    //
-    // function div(n1, n2){
-    //     //ret ans
-    // }
-    //
     // function load(address){
     //     //ret ans
     // }
@@ -380,7 +391,15 @@ function exec(s,Vj,Vk){
                                 </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-
+                                <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                           loopOnAdd();
+                                        }}
+                                        sx={{ mt: 3, ml: 1 }}
+                                    >
+                                        Test
+                                    </Button>
                                     <Button
                                         variant="contained"
                                         onClick={() => {
