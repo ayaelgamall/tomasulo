@@ -703,7 +703,7 @@ function Anim() {
                                 Cycle : {cycle}
                             </Typography>
                             <React.Fragment>
-                                {cont &&
+                                {cont===true &&
                             <Box style={{position: "fixed" ,bottom: 0
                                 ,right: 0,margin:20}} sx={{ display: 'flex', justifyContent: 'flex-end' ,position: "fixed" ,bottom: 0
                                 ,right: 0}} >
