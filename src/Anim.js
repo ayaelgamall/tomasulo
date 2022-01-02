@@ -58,7 +58,7 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
+    const [memory, setMemory] = useState({1:5,  2:6,  3:4,  4:"",5:"",6:"",7:"",8:"",9:"",10:""});
 
     // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
     //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
@@ -85,6 +85,7 @@ function Anim() {
     // console.log("here")
     const [cycle, setCycle] = useState(0);
     const [cont, setCont] = useState(main.length!==0);
+    let doneCount =0; //number of done instructions
     let inst=0;//user
     let write=0;
     useEffect(()=>{
@@ -442,6 +443,9 @@ function Anim() {
             setMain(main2);
             console.log("main after change")
             console.log(main)
+            doneCount++;
+            if(doneCount === main.length) //if i'm done w my program
+                setCont(false);
         }
     }
     function MUL(n1, n2) { return Number(n1) * Number(n2) }
