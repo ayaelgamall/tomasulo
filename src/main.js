@@ -106,7 +106,7 @@ export default function Main() {
                             <React.Fragment>
                         <Grid container spacing={2} justifyContent="space-around"  alignItems="center" direction={'row'} >
                          <Grid item xs={12} sm={5} textalign='center'>
-                        <Grid item xs textalign='center' component={Paper} elevation={6} square>
+                        <Grid item xs textalign='center' component={Paper} elevation={6} square borderRadius={'5px'}>
                           <Box sx={{
                               my: 8,
                               mx: 4,
@@ -151,7 +151,7 @@ export default function Main() {
                         {/*</Grid>*/}
 
 
-                        <Grid item xs textalign='center'component={Paper} elevation={6} square>
+                        <Grid item xs textalign='center'component={Paper} elevation={6} square borderRadius={'5px'}>
                           <Box
                             sx={{
                               my: 8,
@@ -258,7 +258,7 @@ export default function Main() {
                         </Grid>
                         </Grid>
 
-                            <Grid item xs={12} sm={5}  textalign='center' component={Paper} elevation={6} square>
+                            <Grid item xs={12} sm={5}  textalign='center' component={Paper} elevation={6} square borderRadius={'5px'}>
                                 <Box sx={{
                                     my: 8,
                                     mx: 4,
