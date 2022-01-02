@@ -529,6 +529,7 @@ function Anim() {
             if(station[i].busy===""||station[i].busy===0){
                 return i+1;
             }
+
         }
         return -1;
         // masalan law stationIdx=1: yb2a check el (add/sub), 
