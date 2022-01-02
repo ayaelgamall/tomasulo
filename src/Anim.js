@@ -34,8 +34,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableHead = styled(TableCell)(({ theme }) => ({
-    backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    // backgroundColor: theme.palette.common.black,
+    backgroundColor: "#005b64",
+
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
     },
@@ -56,13 +58,12 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    const [memory, setMemory] = useState([0,0,0,0,0,0,0,0,0,0]);
+    // const [memory, setMemory] = useState({1:"",2:"",3:"",4:"",5:"",6:"",7:"",8:"",9:"",10:""});
 
-//     const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
-//                                         {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
-//                                         // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
-//                                         {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null},
-//                                         {Instruction:"LD, 3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"L1", address:null}]
+    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
+    //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
+    //                                     // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
+    //                                     {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null} ]
 // );
 
     // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
@@ -74,7 +75,7 @@ function Anim() {
     const [mul, setMul] = useState(getInitialState("M"));
 
     const [load, setLoad] = useState(getInitialStateLoad());
-    // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: "",temp=""}
+    // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: ""}
     const [store, setStore] = useState(getInitialStateStore);
 
     // reg: [{Qi= , val= }]
@@ -83,9 +84,13 @@ function Anim() {
     const latency=key.latency;
     // console.log("here")
     const [cycle, setCycle] = useState(0);
-    let cont = true;
-    let inst = 0;//user
-    let write = 0;
+    let cont =true;
+    let inst=0;//user
+    let write=0;
+    useEffect(()=>{
+        if(cycle===0)
+            doCycle();
+    },[]);
 
     function getInitialStateStore() {
         let res = [];
@@ -106,9 +111,9 @@ function Anim() {
 
     function getInitialState(a) {
         return [
-            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
             ];
         // return [{ tag: "A1", Qj: "", Qk: "", Vj: 5, Vk: 22, temp: 27, busy: 1, op: "add", started: true, idx: 0 },
         // { tag: "A2", Qj: "", Qk: "A1", Vj: 5, Vk: "", temp: "", busy: 0, op: "add", started: false, idx: 1 }];
@@ -176,20 +181,21 @@ function Anim() {
         console.log("load")
         console.log(load)
 
-        let load2 = load;
-        let main2 = main;
+        let load2=load;
+        let main2=main;
 
-        for (let i = 0; i < load.length; i++) {
-            const inst = load[i]
-            if (inst.busy === 1 && !inst.started && inst.V !== "") {
+        for(let i=0;i<load.length;i++){
+            const inst=load[i]
+            if(inst.busy===1 && !inst.started && inst.V!=="")
+            {
 
-                console.log("will do load ")
-                console.log(load[i])
+                 console.log("will do load ")
+                 console.log(load[i])
 
-                load2[i].started = true;
+                load2[i].started=true;
 
-                main2[load[i].idx].ExecStart = cycle
-                load2.temp = exec(main2[load[i].idx].Instruction, inst.Address, inst.V)
+                main2[load[i].idx].ExecStart=cycle
+                load2.temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
                 console.log("loaded")
 
                 console.log(load2.temp)
@@ -203,7 +209,8 @@ function Anim() {
         console.log("load after change")
         console.log(load2)
     }
-    function loopOnAdd() {
+    function loopOnAdd()
+    {
 
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
@@ -231,23 +238,24 @@ function Anim() {
         console.log("add after change" + add)
 
     }
-    function loopOnMul() {
+    function loopOnMul(){
 
         // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
         console.log("dakhal")
-        console.log("mul" + mul)
-        let mul2 = mul;
-        let main2 = main;
+        console.log("mul"+mul)
+        let mul2=mul;
+        let main2=main;
 
-        for (let i = 0; i < mul.length; i++) {
-            const inst = mul[i]
-            if (inst.busy === 1 && inst.Qk === "" && inst.Qj === "" && !inst.started) {
+        for(let i=0;i<mul.length;i++){
+            const inst=mul[i]
+            if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+            {
 
-                console.log("will execute " + Object.values(mul2[i]))
+                console.log("will execute "+Object.values(mul2[i]))
 
-                mul2[i].started = true;
+                mul2[i].started=true;
 
-                mul2[i].temp = exec(main2[mul[i].idx].Instruction, mul2[i].Vj, mul2[i].Vk)
+                mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
             }
         }
         setMul(mul2);
@@ -258,6 +266,8 @@ function Anim() {
         console.log("mul after change")
         console.log(mul)
     }
+
+
 
 
 
