@@ -56,9 +56,11 @@ function Anim() {
     const key = location.state;
     const theme = createTheme();
     const [main, setMain] = useState(key.Instructions);
-    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
-    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}]);
-    //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
+    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
+                                        // {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
+                                        // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null}]);
+
+    // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
     //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= }
     const [add, setAdd] = useState(getInitialState("A"));
@@ -103,6 +105,7 @@ function Anim() {
             ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
+        // return [{tag:"M1",op:"mul", Vj:5, Vk:2 ,Qj: "", Qk:"", busy: 1,  idx:2,started: false, temp:""}]
     }
     function getInitialStateLoad() {
         return [{tag: "L1", Address: "", busy: "", idx: "",started: false,temp:""},
@@ -129,50 +132,71 @@ function Anim() {
 
     }
 
-    function loopOnAdd()
-    {}
+ 
     function loopOnLoad()
     {
     }
     function loopOnStore()
     {
     }
-    function loopOnAdd()
-    {
+    // function loopOnAdd()
+    // {
         
-        var currCycle=3
-        var addLatency=2
-        // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
+    //     var currCycle=3
+    //     // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
+    // console.log("add"+add)
+    // let add2=add;
+    // let main2=main;
 
-
-    var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
-    console.log(add)
-    let add2=add;
-    let main2=main;
-
-    for(let i=0;i<add.length;i++){
-        const inst=add[i]
-        if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
-        {
+    // for(let i=0;i<add.length;i++){
+    //     const inst=add[i]
+    //     if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+    //     {
         
-            console.log("will execute"+Object.values(add2[i]))
+    //         console.log("will execute"+Object.values(add2[i]))
             
-            add2[i].started=true;
+    //         add2[i].started=true;
             
-            main2[add[i].idx].ExecStart=currCycle
-            // main2[add[i].idx].ExecEnd=currCycle+addLatency
-            add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
-        }
-    }
+    //         main2[add[i].idx].ExecStart=currCycle
+    //         // main2[add[i].idx].ExecEnd=currCycle+addLatency
+    //         add2[i].temp = exec(main2[add[i].idx].Instruction,add2[i].Vj,add2[i].Vk)
+    //     }
+    // }
        
-    setAdd(add2);
-    setMain(main2);
-    console.log(main)
-    console.log(add)
+    // setAdd(add2);
+    // setMain(main2);
+    // console.log("main after change"+main)
+    // console.log("add after change"+add)
 
-    }
+    // }
     function loopOnMul(){
+        var currCycle=3
+        // mul: [{tag=M1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="mul",started= true, endTime =4 }]
+        console.log("dakhal")
+        console.log("mul"+mul)
+        let mul2=mul;
+        let main2=main;
+
+        for(let i=0;i<mul.length;i++){
+            const inst=mul[i]
+            if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
+            {
+            
+                console.log("will execute "+Object.values(mul2[i]))
+                
+                mul2[i].started=true;
+                
+                mul2[i].temp = exec(main2[mul[i].idx].Instruction,mul2[i].Vj,mul2[i].Vk)
+            }
+        }
+        setMul(mul2);
+        setMain(main2);
+
+        console.log("main")
+        console.log(main)
+        console.log("mul after change")
+        console.log(mul)
     }
 
     function loopOnLoadStore(){
@@ -301,7 +325,7 @@ function Anim() {
     }
     
     function startExecution(){
-       loopOnAdd()
+    //    loopOnAdd()
        loopOnMul()
        loopOnLoad()
        loopOnStore()
@@ -427,7 +451,8 @@ function Anim() {
                                 <Button
                                         variant="contained"
                                         onClick={() => {
-                                           loopOnAdd();
+                                            console.log("hi");
+                                           loopOnMul();
                                         }}
                                         sx={{ mt: 3, ml: 1 }}
                                     >
