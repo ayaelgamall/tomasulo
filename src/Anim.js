@@ -34,8 +34,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableHead = styled(TableCell)(({ theme }) => ({
-    backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    // backgroundColor: theme.palette.common.black,
+    backgroundColor: "#005b64",
+
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
     },
@@ -68,7 +70,7 @@ function Anim() {
 
     const [load, setLoad] = useState(getInitialStateLoad());
 
-    const [store, setStore] = useState(getInitialStateStore);
+    const [store, setStore] = useState(getInitialStateStore());
 
     // reg: [{Qi= , val= }]
     const [reg, setReg] = useState(getInitialStateReg());
@@ -79,6 +81,10 @@ function Anim() {
     let cont =true;
     let inst=0;//user
     let write=0;
+    useEffect(()=>{
+        if(cycle===0)
+            doCycle();
+    },[]);
 
     function getInitialStateStore() {
         let res=[];
@@ -97,9 +103,9 @@ function Anim() {
 
     function getInitialState(a) {
         return [
-            {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            {tag: {a}+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
-            {tag: {a}+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"2",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
+            {tag: a+"3",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
             ];
         // return [{tag:"A1", Qj: "", Qk:"", Vj:5, Vk:2 ,temp:"", busy: 0, op:"add",started: false, idx:0},
         //        {tag:"A2", Qj: "", Qk: "", Vj:5, Vk:2, temp: "", busy: 1, op:"add",started: false, idx:1}];
@@ -373,7 +379,7 @@ function Anim() {
 
     function InstructionsFront() {
         return(
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
             <Table  aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -389,13 +395,136 @@ function Anim() {
                             <StyledTableCell scope="row">
                                 {row.Instruction}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.Issue}</StyledTableCell>
-                            <StyledTableCell align="right">{row.ExecStart} , {row.ExecEnd}</StyledTableCell>
-                            <StyledTableCell align="right">{row.WB}</StyledTableCell>
+                            <StyledTableCell align="left">{row.Issue}</StyledTableCell>
+                            {row.ExecStart!=="" &&
+                            <StyledTableCell align="left">{row.ExecStart} ... {row.ExecEnd}</StyledTableCell>}
+                            {row.ExecStart==="" &&
+                            <StyledTableCell align="left"></StyledTableCell>}
+                            <StyledTableCell align="left">{row.WB}</StyledTableCell>
                         </StyledTableRow>))}
                 </TableBody>
             </Table>
         </TableContainer>
+        )
+    }
+
+    function StatesFront(flag) {
+        const table = flag==="add"?add:mul;
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">op</StyledTableHead>
+                            <StyledTableHead align="left">Vj</StyledTableHead>
+                            <StyledTableHead align="left">Vk</StyledTableHead>
+                            <StyledTableHead align="left">Qj</StyledTableHead>
+                            <StyledTableHead align="left">Qk</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {table.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{row.op}</StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Vj}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Vk}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Qj}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Qk}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function loadFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table   aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Address</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {load.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function storeFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Address</StyledTableHead>
+                            <StyledTableHead align="left">V</StyledTableHead>
+                            <StyledTableHead align="left">Q</StyledTableHead>
+                            <StyledTableHead align="left">busy</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {store.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Address}</StyledTableCell>
+                                <StyledTableCell align="left">{row.V}</StyledTableCell>
+                                <StyledTableCell align="left">{row.Q}</StyledTableCell>
+                                <StyledTableCell align="left">{row.busy}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    function regFront() {
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead align="left">Qi</StyledTableHead>
+                            <StyledTableHead align="left">Value</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {reg.map((row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row.tag}
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">{row.Qi}</StyledTableCell>
+                                <StyledTableCell align="left">{row.val}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         )
     }
 
@@ -421,6 +550,12 @@ function Anim() {
                             <React.Fragment>
                                 <React.Fragment>
                                     {InstructionsFront()}
+                                    <br/><br/>
+                                    {StatesFront("add")}<br/><br/>
+                                    {StatesFront("mul")}<br/><br/>
+                                    {loadFront()}<br/><br/>
+                                    {storeFront()}<br/><br/>
+                                    {regFront()}
                                 </React.Fragment>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
