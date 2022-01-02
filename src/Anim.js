@@ -129,18 +129,14 @@ function Anim() {
 
     }
 
-    async function loopOnAdd()
+ function loopOnAdd()
 {
     
     var currCycle=3
     var addLatency=2
     // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
 
-    // await setAdd([{tag:"A1", Qj: "", Qk:"", Vj:5,Vk:2 ,temp:"", busy: 0, op:"add",started: false, endTime :""},
-    //              {tag:"A2", Qj: "", Qk: "", Vj:5,Vk:2 ,temp: "", busy: 1, op:"add",started: false, endTime : ""}])
-   
-    // await setMain([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A1", address:null},
-    //        {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:null, ExecEnd:null, WB:6,tag:"A2", address:null}])
+
 
     var BusyAdd = add.filter(inst => inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started);
     console.log(add)
@@ -166,7 +162,6 @@ function Anim() {
     setMain(main2);
     console.log(main)
     console.log(add)
-
 
 }
   
