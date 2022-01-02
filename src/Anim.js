@@ -276,23 +276,19 @@ function Anim() {
 
 
     function endExecution() {
-        main.forEach(item => {
-            if (item.ExecStart !== null) {
-                if (item.endExecution === null) {
-                    const op = item.Instruction.substring(0, 3).toLowerCase();
-                    if (latency.op + item.ExecStart - 1 === cycle) {
-                        setMain(prevState => ({
-                            ...prevState,
-                            item: {
-                                ExecEnd: cycle
-                            }
-                        }));
+        let main2 = main;
+
+            for (let i = 0; i < main.length; i++) {
+                const inst = main2[i]
+                if (inst.ExecStart !== null) {
+                    if (inst.ExecEnd === null) {
+                        const op = inst.Instruction.substring(0, 3).toLowerCase();
+                        if (latency.op + inst.ExecStart - 1 === cycle) {
+                            main2[i].ExecEnd=cycle;
+                        }
                     }
                 }
-            }
-        });
-        // remove instructions from reservation station
-        // dependent instructions are given result value of ended instructions
+            }setMain(main2);
     }
 
     //iman
