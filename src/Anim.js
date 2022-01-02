@@ -70,7 +70,7 @@ function Anim() {
 
     const [load, setLoad] = useState(getInitialStateLoad());
 
-    const [store, setStore] = useState(getInitialStateStore());
+    const [store, setStore] = useState(getInitialStateStore);
 
     // reg: [{Qi= , val= }]
     const [reg, setReg] = useState(getInitialStateReg());
