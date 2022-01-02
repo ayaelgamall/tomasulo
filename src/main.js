@@ -1,46 +1,31 @@
-import logo from './logo.svg';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import * as THREE from "three";
 import NET from 'vanta/dist/vanta.net.min'
-import {loopOnAdd} from './Anim'
 
-import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect,useRef } from 'react';
 import {
-  Table,
-  TableCell,
-  TableBody,
-  TableHead,
-  TableRow
+    Table,
+    TableCell,
+    TableBody,
+    TableRow,
 } from "@material-ui/core";
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useNavigate } from 'react-router-dom';
 
 
-// import './App.css';
-// const useStyles = makeStyles(styles);
 let data = [];
 let idx=0;
 export default function Main() {
     let navigate = useNavigate();
-  // const classes = useStyles();
-  const [Instructions, setInstructions] = useState([]);
-  const [tables,setTable]=useState(data);
+    const [multiLine, setMultiLine] = useState("");
+    const [tables,setTable]=useState(data);
   const [ADD,setADD]=useState(1);
   const [SUB,setSUB]=useState(1);
   const [MUL,setMUL]=useState(1);
@@ -72,20 +57,24 @@ export default function Main() {
         }
     }, [vantaEffect])
     function addInstruction(){
-        console.log("data");
-        console.log(Instructions);
-
-        let data=tables.concat({
-            id : ++idx,
-            Instruction:Instructions,
-            Issue:"", ExecStart:"", ExecEnd:"", WB:"",tag:"", address:"", RD:"", RS:"", RT:""
-        })
-        
+        let data=tables;
+        const n = multiLine.split("\n");
+        for(let x in n) {
+            let row = n[x];
+            if ((row).length > 2) {
+                console.log("length ", (row).length)
+                data=data.concat({
+                    id: ++idx,
+                    Instruction: n[x],
+                    Issue: "", ExecStart: "", ExecEnd: "", WB: "", tag: "",
+                })
+            }
+        }
         setTable(data);
-        console.log(data);
 
     }
-  return (
+
+    return (
     <div>
         <div 
             // className={classes.pageHeader}
@@ -124,13 +113,17 @@ export default function Main() {
                                 label="Insert instruction"
                                 name="email"
                                 autoComplete="email"
+                                multiline
                                 autoFocus
+                                // onChange={ (e)=> {
+                                //         setInstructions(e.target.value);
+                                //
+                                // }}
                                 onChange={ (e)=> {
-                                        setInstructions(e.target.value);
-                                    
-                                }
-                            }
+                                    setMultiLine(e.target.value);
+                                }}
                               />
+
                               
                               
                               <Button
@@ -151,7 +144,7 @@ export default function Main() {
                         {/*</Grid>*/}
 
 
-                        <Grid item xs textalign='center'component={Paper} elevation={6} square borderRadius={'5px'}>
+                        <Grid item xs textalign='center' component={Paper} elevation={6} square borderRadius={'5px'}>
                           <Box
                             sx={{
                               my: 8,
