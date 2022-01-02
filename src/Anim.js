@@ -8,7 +8,6 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
-
 import { useState, useEffect } from 'react';
 import {
     styled,
@@ -69,22 +68,18 @@ function Anim() {
 
     //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= ""}
     const [add, setAdd] = useState(getInitialState("A"));
-    
     //mul: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 10, busy= 1, op="mul",started= true, endTime = 4, idx:"" }
     const [mul, setMul] = useState(getInitialState("M"));
-
     const [load, setLoad] = useState(getInitialStateLoad());
     // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: "",temp=""}
     const [store, setStore] = useState(getInitialStateStore);
-
     // reg: [{Qi= , val= }]
     const [reg, setReg] = useState(getInitialStateReg());
-
     const latency=key.latency;
     // console.log("here")
     const [cycle, setCycle] = useState(0);
     let cont =true;
-    let inst=0;//user
+    let instr=0;// the instruction that I will be executing now
     let write=0;
 
     function getInitialStateStore() {
@@ -99,11 +94,10 @@ function Anim() {
     function getInitialStateReg() {
         let res=[];
         for (let i = 0; i < 32; i++) {
-            res.push({tag:"F"+i,Qi:"",val:""});
+            res.push({tag:"F"+i,Qi:"",val:0});
         }
         return res;
     }
-
     function getInitialState(a) {
         return [
             {tag: {a}+"1",op:"",Vj:"",Vk:"",Qj:"",Qk:"", busy: "", idx: "",started: false,temp:""},
@@ -131,6 +125,19 @@ function Anim() {
         writeResult();
     }
     function issue(){
+        let main2=main;
+        const inst= main2[instr];
+        const stationidx =type(inst.Instruction);
+        const tagIdx = stationAvailable(stationidx);
+        console.log(tagIdx);
+        if(tagIdx!==-1){
+            putInStation(inst.Instruction , stationidx , tagIdx); // we will put the instruction in the reservation station
+            inst.Issue=cycle;
+            main2[instr]=inst;
+            setMain(main2);
+            instr+=1; // next time we will fetch the instruction after
+
+        }
         // instruction=stringToInstruction(inst gdeeda)
         // stationType=type(instruction)
         // if(stationAvailable(stationType))
@@ -139,8 +146,6 @@ function Anim() {
         // }
 
     }
-
- 
     function loopOnStore()
     {
         // store: [ {tag:"S1" ,Address:3, V:4, Q:"", busy:1, started: false, temp:""}]
@@ -265,10 +270,6 @@ function Anim() {
         console.log("mul after change")
         console.log(mul)
     }
-
-    
-  
-
     function endExecution(){
         main.forEach(item=>{
             if(item.ExecStart!==null){
@@ -376,7 +377,6 @@ function Anim() {
     function DIV(n1,n2){return Number(n1)/Number(n2)}
     function SUB(n1,n2){return Number(n1)-Number(n2)}
     function LD(address){return memory[address]}
-
     function STR(address, value){
         console.log("will change mem")
         let memory2=memory;
@@ -385,17 +385,12 @@ function Anim() {
         console.log("memory after store")
         console.log(memory)
     }
-    
- 
-    
     function startExecution(){
        loopOnAdd()
        loopOnMul()
        loopOnLoad()
        loopOnStore()
     }
-
-
     function exec(s,Vj,Vk){
         const inst=s.split(',');
         console.log(inst[0])
@@ -412,7 +407,6 @@ function Anim() {
    
 
     }
-
     function type(instruction){
         const op= instruction.substring(0,3).toLowerCase();
         if(op==="add"|| op==="sub")return 1;
@@ -423,28 +417,145 @@ function Anim() {
     }
     function stationAvailable(stationIdx){
         const station=stationIdx===1?add:stationIdx===2?mul:stationIdx===3?store:load;
-        station.forEach(row=>{
-            if(row.busy==="")return true;
-        });
-        return false;
+        let idx=0;
+        for(let i=0;i<station.length;i++){
+            if(station[i].busy===""){
+                return i+1;
+            }
+        }
+        return -1;
         // masalan law stationIdx=1: yb2a check el (add/sub), 
         // law stationIdx=2: yb2a check el (mul/div), 
         // law stationIdx=3: yb2a check el (ld/str)
         // returns boolean
     }
-
-    function putInStation(instruction, stationIdx){
+    function putInStation(instruction, stationIdx , tagIdx){
         //w update el tag bel station example: tag=M1
         //void
+     if(stationIdx===3){ // store
+          putInStore(instruction , tagIdx);
+      }else if (stationIdx===4){ //load
+          putInLoad(instruction , tagIdx);
+      }else if (stationIdx===2){
+          putInMul(instruction , tagIdx);
+      }else{
+          putInAdd(instruction , tagIdx);
+      }
     }
+    function getRegNo(register){ // takes as an input R123 return 123
+        var arr = (register+"").split(" ");
+        for (let i = 0; i < arr.length; i++) {
+            if(arr[i]!=="")
+                return arr[i].substring(1,arr[i].length);
+        }
+    }
+    function putInAdd(instruction , tagIdx){
+        // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
+        let add2=add;
+        var tmp = instruction.split(",");
+        let opcode = tmp[0].toLowerCase();
+        let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}        // lets get the first reg
+        const R1 = getRegNo(tmp[1]);
+        const R2 = getRegNo(tmp[2]);
+        const R3 = getRegNo(tmp[3]);
+        console.log(R1);
+        console.log(R2);
+        console.log(R3);
+        // to set the Qj , Vk
+        if(regReady(R2)){
+            a.Vj=readReg(R2);
+            a.Qj="";
+        }else {
+            a.Qj=readReg(R2);
+            a.Vj=0;
+        }
+        if(regReady(R3)){
+            a.Vk=readReg(R3);
+            a.Qk="";
+        }else {
+            a.Qk=readReg(R3);
+            a.Vk=0;
+        }
+        add2[tagIdx-1]=a;
+        writeReg(R1,a.tag);
+        setAdd(add2);
+    }
+    function putInMul( instruction , tagIdx){
+        let mul2=mul;
+        var tmp = instruction.split(',');
+        let opcode = tmp[0].toLowerCase();
 
+        let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: "",started: false,temp:""}
+        // lets get the first reg
+        const R1 = getRegNo(tmp[1]);
+        const R2 = getRegNo(tmp[2]);
+        const R3 = getRegNo(tmp[3]);
+
+        // to set the Qj , Vk
+        if(regReady(R2)){
+            a.Vj=readReg(R2);
+            a.Qj="";
+        }else {
+            a.Qj=readReg(R2);
+            a.Vj=0;
+        }
+        if(regReady(R3)){
+            a.Vk=readReg(R3);
+            a.Qk="";
+        }else {
+            a.Qk=readReg(R3);
+            a.Vk=0;
+        }
+        mul2[tagIdx-1]=a;
+        writeReg(R1,a.tag);
+        setMul(mul2);
+    }
+    function putInStore(instruction , tagIdx){
+        // store :{tag:"S1" ,Address:"", V:"", Q:"", busy:1, started: false, temp:"",idx: "",temp=""}
+        let store2= store;
+        var tmp = instruction.split(",");
+        let s ={tag:"S"+tagIdx,Address:tmp[2],V:"",Q:"",busy:1,started: false, idx:instr};
+        const R1 = getRegNo(tmp[1]);
+        if(regReady(R1)){
+            s.V=readReg(R1);
+            s.Q="";
+        }else{
+            s.V=0;
+            s.Q=readReg(R1);
+        }
+        store2[tagIdx-1]=s;
+        setStore(store2);
+    }
+    function putInLoad(instruction , tagIdx){
+        let load2 = load;
+        var tmp = instruction.split(',');
+        let l ={tag: "L"+tagIdx, Address: "", busy:1, idx: instr,started: false,temp:""};
+        load2[tagIdx-1]=l;
+        writeReg(getRegNo(tmp[1]),l.tag);
+        setLoad(load2);
+    }
     function regReady(register){
+        console.log(register, "input");
+        const r = reg[Number(register)];
+        console.log(reg[Number(register)]," hi");
+       // console.log(r);
+        if(r.Qi==="")return true; // wa have the register value ready
+        return false;
         //returns true register has val, false if no val yet (just tag)
         //always call this before calling readReg
     }
-
     function readReg(register){
-        //returns value 
+        //returns value
+        const r = reg[register];
+        if(r.Qi==="")return r.val; // wa have the register value ready
+        return r.Qi;
+    }
+    function writeReg(register , tag){
+        let reg2=reg;
+        const r = reg[register];
+        r.Qi=tag;
+        reg2[register]=r;
+        setReg(reg2);
     }
 
 
@@ -483,7 +594,6 @@ function Anim() {
         </TableContainer>
         )
     }
-
     return (
         <div>
 
@@ -513,11 +623,18 @@ function Anim() {
                                         variant="contained"
                                         onClick={() => {
                                             console.log("hi");
-                                           loopOnLoad();
+                                           issue();
+                                           console.log("main ",main);
+                                           console.log("load ",load);
+                                           console.log("store ",store);
+                                           console.log("mult ",mul);
+                                            console.log("add ",add);
+                                            console.log("reg ",reg);
                                         }}
                                         sx={{ mt: 3, ml: 1 }}
                                     >
                                         Test
+
                                     </Button>
                                     <Button
                                         variant="contained"
@@ -541,5 +658,4 @@ function Anim() {
         </div>
     )
 }
-
 export default Anim;
