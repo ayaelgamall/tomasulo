@@ -30,7 +30,7 @@
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.primary,
+        backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -107,7 +107,8 @@
                     highlightColor: 0x5ed885,
                     midtoneColor: 0xe988e9,
                     lowlightColor: 0x80ff,
-                    baseColor: 0xf6f6f6
+                    baseColor: 0xf6f6f6,
+                    speed: 1.5
                 }))
             }
             return () => {
