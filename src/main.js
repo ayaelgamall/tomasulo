@@ -288,6 +288,15 @@ export default function Main() {
                                   ))
                                 }</TableBody>
                               </Table>
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            sx={{ mt: 3, mb: 2 }}
+                                            onClick={()=>{setTable([]);}}
+                                        >
+                                            Clear Instructions
+
+                                        </Button>
                                     </Box>
                                 </Box>
                             </Grid>
