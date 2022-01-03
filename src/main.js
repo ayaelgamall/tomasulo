@@ -275,10 +275,10 @@ export default function Main() {
                                  {tables.map(item => (
                                     <TableRow key={item.id}>
                                         <TableCell align="left">
-                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.id}</p>
+                                        <p style={{ fontSize: "15px", margin: "0px" }}>{item.id}</p>
                                       </TableCell>
                                       <TableCell align="left">
-                                        <p style={{ fontSize: "13px", margin: "0px" }}>{item.Instruction}</p>
+                                        <p style={{ fontSize: "15px", margin: "0px" }}>{item.Instruction}</p>
                                       </TableCell>
                                       
                                       {/* <TableCell>
