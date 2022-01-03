@@ -89,7 +89,7 @@ export default function Main() {
                 <Container component="main" maxWidth="" sx={{ mb: 4 }}>
                     <Paper variant="outlined" className='background' ref={myRef} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" color="white" align="center">
-                            TOMASOLO
+                            TOMASULO
                         </Typography>
                         <React.Fragment>
                             <React.Fragment>
