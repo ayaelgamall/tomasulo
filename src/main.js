@@ -292,7 +292,7 @@ export default function Main() {
                                             fullWidth
                                             variant="contained"
                                             sx={{ mt: 3, mb: 2 }}
-                                            onClick={()=>{setTable([]);}}
+                                            onClick={()=>{idx=0; setTable([]);}}
                                         >
                                             Clear Instructions
 
