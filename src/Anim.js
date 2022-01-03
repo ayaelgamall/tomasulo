@@ -713,15 +713,15 @@ function Anim() {
     }
     function readReg(register){
         //returns value
-        const r = reg[register];
+        const r = reg[Number(register)];
         if(r.Qi===""||r.Qi===0)return r.val; // wa have the register value ready
         return r.Qi;
     }
     function writeReg(register , tag){
         let reg2=reg;
-        const r = reg[register];
+        const r = reg[Number(register)];
         r.Qi=tag;
-        reg2[register]=r;
+        reg2[Number(register)]=r;
         setReg(reg2);
     }
 
