@@ -32,7 +32,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-const StyledTableHead = styled(TableCell)(({ theme }) => ({
+const StyledTableHead = styled(TableCell)(() => ({
     color: "#FFFFFF",
     // backgroundColor: theme.palette.common.black,
     backgroundColor: "#005b64",
@@ -876,6 +876,31 @@ function Anim() {
             </TableContainer>
         )
     }
+    function memFront() {
+        let mem=Object.keys(memory);
+        return(
+            <TableContainer component={Paper}>
+                <Table  aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
+                            <StyledTableHead style={{color:"white"}} align="left">Value</StyledTableHead>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        { mem.map( (row) => (
+                            <StyledTableRow >
+                                <StyledTableCell scope="row">
+                                    {row}
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">{memory[row]}</StyledTableCell>
+                            </StyledTableRow>))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
 
     return (
         <div>
@@ -921,7 +946,8 @@ function Anim() {
                                     {StatesFront("mul")}<br/><br/>
                                     {loadFront()}<br/><br/>
                                     {storeFront()}<br/><br/>
-                                    {regFront()}
+                                    {regFront()}<br/><br/>
+                                    {memFront()}
                                 </React.Fragment>
                             </React.Fragment>
                         </Paper>
