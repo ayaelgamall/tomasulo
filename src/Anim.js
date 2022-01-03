@@ -784,8 +784,11 @@ function Anim() {
                         </TableRow>
                     </TableHead>
                     <React.Fragment>
+                        {open===true &&
                     <TableBody>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
+
+                    {/*<Collapse in={open} timeout="auto" unmountOnExit>*/}
+
                         {table.map((row) => (
                             <StyledTableRow >
                                 <StyledTableCell scope="row">
@@ -799,8 +802,9 @@ function Anim() {
                                 <StyledTableCell align="left">{row.Qk}</StyledTableCell>
                                 <StyledTableCell align="left">{row.busy}</StyledTableCell>
                             </StyledTableRow>))}
-                            </Collapse>
-                    </TableBody>
+                            {/*</Collapse>*/}
+
+                    </TableBody>}
                     </React.Fragment>
                 </Table>
             </TableContainer>
