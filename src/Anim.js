@@ -65,13 +65,7 @@ function Anim() {
     const [main, setMain] = useState(key.Instructions);
     const [memory, setMemory] = useState({1:"1.5",2:"0.5",3:"1",4:"2.5",5:"3.2",6:"0",7:"5.5",8:"6",9:"12.75",10:"22.22"});
 
-    // const [main, setMain] = useState([{Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A1", address:null},
-    //                                     {Instruction:"ADD, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"A2", address:null},
-    //                                     // {Instruction:"MUL, R1, R2, R3", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"M1", address:null},
-    //                                     {Instruction:"STR, 3, 5", Issue:1, ExecStart:"", ExecEnd:"", WB:6,tag:"S1", address:null} ]
-// );
 
-    // {Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1, address=null, RD=1, RS=2, RT=3 }
 
     //add: {Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= 12, busy= 1, op="add",started= true, endTime = 4, idx= ""}
     const [add, setAdd] = useState(getInitialState("A"));
@@ -223,7 +217,7 @@ function Anim() {
                 load2[i].temp=exec(main2[load[i].idx].Instruction,inst.Address,inst.V)
                 //console.log("loaded")
 
-                //console.log(load2.temp)
+                console.log(load2)
             }
         }
 
@@ -505,7 +499,7 @@ function Anim() {
     function ADD(n1, n2) { return Number(n1) + Number(n2) }
     function DIV(n1, n2) { return Number(n1) / Number(n2) }
     function SUB(n1, n2) { return Number(n1) - Number(n2) }
-    function LD(address) { return memory[address] }
+    function LD(address) {console.log("address",address," mem[a]",memory[address]); return memory[address] }
 
     function STR(address, value) {
         //console.log("will change mem")
@@ -529,17 +523,18 @@ function Anim() {
     function exec(s, Vj, Vk) {
         const inst = s.split(',');
         //console.log(inst[0])
-        let X=inst[0].toLowerCase()
-        //console.log("X",X)
+        let X=inst[0].toLowerCase().trim();
+        console.log("X",X ," length ",X.length)
         switch(X){
             case "add": return ADD(Vj,Vk)
             case "sub": return SUB(Vj,Vk)
             case "mul": return MUL(Vj,Vk)
             case "div": return DIV(Vj,Vk)
             case "str": return STR(Vj,Vk)
-            case "ld": return LD(Vj)
+            case "ld":
+                return LD(Vj)
         }
-   
+
 
     }
 
@@ -590,11 +585,11 @@ function Anim() {
         // add: [{tag=A1, Qj= 0, Qk= 0, Vj= 5,Vk=2 ,temp= null, busy= 1, op="add",started= true, endTime =4 }]
         let add2=add;
         var tmp = instruction.split(",");
-        let opcode = tmp[0].toLowerCase();
+        let opcode = tmp[0].toLowerCase().trim();
         let a ={tag:"A"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}        // lets get the first reg
-        const R1 = getRegNo(tmp[1]);
-        const R2 = getRegNo(tmp[2]);
-        const R3 = getRegNo(tmp[3]);
+        const R1 = getRegNo(tmp[1].trim());
+        const R2 = getRegNo(tmp[2].trim());
+        const R3 = getRegNo(tmp[3].trim());
         //console.log(R1);
         //console.log(R2);
         //console.log(R3);
@@ -631,13 +626,13 @@ function Anim() {
     function putInMul( instruction , tagIdx){
         let mul2=mul;
         var tmp = instruction.split(',');
-        let opcode = tmp[0].toLowerCase();
+        let opcode = tmp[0].toLowerCase().trim();
 
         let a ={tag:"M"+tagIdx,op:opcode,Vj:"",Vk:"",Qj:"",Qk:"", busy: 1, idx: instr,started: false,temp:""}
         // lets get the first reg
-        const R1 = getRegNo(tmp[1]);
-        const R2 = getRegNo(tmp[2]);
-        const R3 = getRegNo(tmp[3]);
+        const R1 = getRegNo(tmp[1].trim());
+        const R2 = getRegNo(tmp[2].trim());
+        const R3 = getRegNo(tmp[3].trim());
 
         // to set the Qj , Vk
         if(regReady(R2)){
@@ -674,7 +669,7 @@ function Anim() {
         let store2= store;
         var tmp = instruction.split(",");
         let s ={tag:"S"+tagIdx,Address:tmp[2],V:"",Q:"",busy:1,started: false, idx:instr};
-        const R1 = getRegNo(tmp[1]);
+        const R1 = getRegNo(tmp[1].trim());
         if(regReady(R1)){
             s.V=readReg(R1);
             if(s.V===""){
@@ -698,7 +693,7 @@ function Anim() {
         var tmp = instruction.split(',');
         let l ={tag: "L"+tagIdx, Address: tmp[2], busy:1, idx: instr,started: false,temp:""};
         load2[tagIdx-1]=l;
-        writeReg(getRegNo(tmp[1]),l.tag);
+        writeReg(getRegNo(tmp[1].trim()),l.tag);
         let main2=main;
         let inst=main2[instr];
         inst.tag=l.tag;
@@ -716,15 +711,15 @@ function Anim() {
     }
     function readReg(register){
         //returns value
-        const r = reg[register];
+        const r = reg[Number(register)];
         if(r.Qi===""||r.Qi===0)return r.val; // wa have the register value ready
         return r.Qi;
     }
     function writeReg(register , tag){
         let reg2=reg;
-        const r = reg[register];
+        const r = reg[Number(register)];
         r.Qi=tag;
-        reg2[register]=r;
+        reg2[Number(register)]=r;
         setReg(reg2);
     }
 
