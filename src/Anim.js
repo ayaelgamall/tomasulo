@@ -5,7 +5,10 @@ import Paper from '@mui/material/Paper';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import NavigationIcon from '@mui/icons-material/Navigation';
 
 import { useState, useEffect } from 'react';
@@ -731,6 +734,7 @@ function Anim() {
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>
+            
                         <TableRow>
                             <StyledTableHead style={{color:"white"}}> </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Issue</StyledTableHead>
@@ -759,12 +763,23 @@ function Anim() {
     }
     function StatesFront(flag) {
         const table = flag==="add"?add:mul;
+        const [open, setOpen] = React.useState(false);
         return(
             <TableContainer component={Paper}>
                 <Table  aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead> </StyledTableHead>
+                        <StyledTableHead>
+                        <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                            style={{color:"white"}}
+                            // color="white"
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                             </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">op</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Vj</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Vk</StyledTableHead>
@@ -773,7 +788,9 @@ function Anim() {
                             <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
+                    <React.Fragment>
                     <TableBody>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
                         {table.map((row) => (
                             <StyledTableRow >
                                 <StyledTableCell scope="row">
@@ -787,7 +804,9 @@ function Anim() {
                                 <StyledTableCell align="left">{row.Qk}</StyledTableCell>
                                 <StyledTableCell align="left">{row.busy}</StyledTableCell>
                             </StyledTableRow>))}
+                            </Collapse>
                     </TableBody>
+                    </React.Fragment>
                 </Table>
             </TableContainer>
         )
