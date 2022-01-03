@@ -107,12 +107,9 @@ export default function Main() {
                             <Box component="form" noValidate  sx={{ mt: 1 }}>
                               <TextField
                                 margin="normal"
-                                required
                                 fullWidth
-                                id="email"
                                 label="Insert instruction"
-                                name="email"
-                                autoComplete="email"
+                              
                                 multiline
                                 autoFocus
                                 // onChange={ (e)=> {
