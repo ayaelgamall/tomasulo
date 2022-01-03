@@ -11,7 +11,7 @@
     import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
     import NavigationIcon from '@mui/icons-material/Navigation';
 
-    import { useState, useEffect } from 'react';
+    import { useState, useEffect,useRef } from 'react';
     import {
     styled,
     Table,
@@ -24,10 +24,13 @@
     } from "@mui/material";
     import { useLocation } from "react-router-dom";
     import {Fab} from "@material-ui/core";
+    import * as THREE from "three";
+    import NET from 'vanta/dist/vanta.fog.min'
+
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: theme.palette.primary,
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -58,7 +61,7 @@
     var doneCount =0; //number of done instructions
 
     function Anim() {
-
+        
     const location = useLocation();
     const key = location.state;
     const theme = createTheme();
@@ -87,10 +90,31 @@
     // let inst=0;//user
     //user
     let cycle=0;
-    useEffect(()=>{
-        if(cycleFront===0 && main.length!==0)
+    const [vantaEffect, setVantaEffect] = useState(0);
+        const myRef = useRef(null);
+        useEffect(() => {
+            if(cycleFront===0 && main.length!==0)
             doCycle();
-    },[]);
+            if (!vantaEffect) {
+                setVantaEffect(NET({
+                    el: myRef.current,
+                    THREE: THREE,
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 3000.00,
+                    minWidth: 200.00,
+                    highlightColor: 0x5ed885,
+                    midtoneColor: 0xe988e9,
+                    lowlightColor: 0x80ff,
+                    baseColor: 0xf6f6f6
+                }))
+            }
+            return () => {
+                if (vantaEffect) vantaEffect.destroy();
+            }
+        }, [vantaEffect])
+   
 
     function getInitialStateStore() {
         let res = [];
@@ -957,21 +981,19 @@
     }
 
     return (
-        <div>
-
-
-            <div
+      
             // className={classes.pageHeader}
             // style={{
             //     backgroundImage: "url(" + image + ")",
             //     backgroundSize: "cover",
             //     backgroundPosition: "top center",
             // }}
-            >
-                <ThemeProvider theme={theme}>
+            
+                <ThemeProvider theme={theme} >
                     <CssBaseline />
-                    <Container component="main" sx={{ mb: 4 }}>
-                        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    
+                        <Paper variant="outlined" className='background' ref={myRef} sx={{ p: { xs: 2, md: 3 } }}>
+                           <Container component="main" sx={{ mb: 4 }} >
                             <Typography component="h1" variant="h4" align="center">
                                 Cycle : # {cycleFront}  {cont===false &&
                                 <Typography component="h1" variant="h4" align="center"> Finished
@@ -1004,13 +1026,12 @@
                                     {MemFront()}
                                 </React.Fragment>
                             </React.Fragment>
+                                                </Container>
+
                         </Paper>
-                    </Container>
 
                 </ThemeProvider>
 
-            </div>
-        </div>
     )
     }
 
