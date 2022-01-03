@@ -1,18 +1,18 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import NavigationIcon from '@mui/icons-material/Navigation';
+    import * as React from 'react';
+    import Box from '@mui/material/Box';
+    import Container from '@mui/material/Container';
+    import Paper from '@mui/material/Paper';
+    import CssBaseline from '@mui/material/CssBaseline';
+    import Typography from '@mui/material/Typography';
+    import { createTheme, ThemeProvider } from '@mui/material/styles';
+    import Collapse from '@mui/material/Collapse';
+    import IconButton from '@mui/material/IconButton';
+    import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+    import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+    import NavigationIcon from '@mui/icons-material/Navigation';
 
-import { useState, useEffect } from 'react';
-import {
+    import { useState, useEffect } from 'react';
+    import {
     styled,
     Table,
     TableBody,
@@ -21,10 +21,10 @@ import {
     TableContainer,
     TableHead,
     TableRow
-} from "@mui/material";
-import { useLocation } from "react-router-dom";
-import {Fab} from "@material-ui/core";
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    } from "@mui/material";
+    import { useLocation } from "react-router-dom";
+    import {Fab} from "@material-ui/core";
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -33,9 +33,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
     },
-}));
+    }));
 
-const StyledTableHead = styled(TableCell)(() => ({
+    const StyledTableHead = styled(TableCell)(() => ({
     color: "#FFFFFF",
     // backgroundColor: theme.palette.common.black,
     backgroundColor: "#005b64",
@@ -43,9 +43,9 @@ const StyledTableHead = styled(TableCell)(() => ({
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
     },
-}));
+    }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
@@ -53,11 +53,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
         border: 0,
     },
-}));
-var instr=0;
-var doneCount =0; //number of done instructions
+    }));
+    var instr=0;
+    var doneCount =0; //number of done instructions
 
-function Anim() {
+    function Anim() {
 
     const location = useLocation();
     const key = location.state;
@@ -127,7 +127,7 @@ function Anim() {
     }
     function doCycle() {
         cycle=cycleFront+1;
-         setCycleFront(cycleFront + 1);
+            setCycleFront(cycleFront + 1);
         startExecution();
         issue();
         //delay
@@ -163,8 +163,6 @@ function Anim() {
         // }
 
     }
-
-
     function loopOnStore() {
         // store: [ {tag:"S1" ,Address:3, V:4, Q:"", busy:1, started: false, temp:""}]
 
@@ -208,8 +206,8 @@ function Anim() {
             if(inst.busy===1 && !inst.started && inst.V!=="")
             {
 
-                 //console.log("will do load ")
-                 //console.log(load[i])
+                    //console.log("will do load ")
+                    //console.log(load[i])
 
                 load2[i].started=true;
 
@@ -271,7 +269,7 @@ function Anim() {
             if(inst.busy===1 && inst.Qk==="" && inst.Qj==="" && !inst.started)
             {
 
-               // console.log("will execute ", (mul2[i]))
+                // console.log("will execute ", (mul2[i]))
 
                 mul2[i].started=true;
                 main2[mul[i].idx].ExecStart = cycle
@@ -286,12 +284,6 @@ function Anim() {
         //console.log("mul after change")
         //console.log(mul)
     }
-
-
-
-
-
-
     function endExecution() {
         let main2 = main;
 
@@ -302,7 +294,7 @@ function Anim() {
 
                     let op = inst.Instruction.substring(0, 3).toLowerCase();
                     if(op[0]==='l')op="ld";
-                   // console.log("latency  ",latency[op] ,"  .....    ", op, " cycle ", cycle , "Execstart ", inst.ExecStart);
+                    // console.log("latency  ",latency[op] ,"  .....    ", op, " cycle ", cycle , "Execstart ", inst.ExecStart);
                     if (Number(latency[op]) + inst.ExecStart - 1 === cycle) {
                         main2[i].ExecEnd=cycle;
                     }
@@ -311,7 +303,6 @@ function Anim() {
             }
         }setMain(main2);
     }
-
     //iman
     //{Instruction="MUL, R1, R2, R3", Issue=1, ExecStart=2, ExecEnd=5, WB=6,tag=M1}
     //{{tag=M1,op=,...,idx=0},{},{}}
@@ -323,7 +314,7 @@ function Anim() {
         /* loop over reg file, add and mul res stations, any tag replace w instruction o/p
         free up res station -> busy = 0 - maybe remove the inst in front end? wla next cycle?
         write curr cycle in big table
-         */
+            */
 
         //console.log("in WB method");
         //console.log("load" , load);
@@ -488,7 +479,7 @@ function Anim() {
             main2[myIndex].WB = cycle
             setMain(main2);
             //console.log("main after change")
-           // console.log(main)
+            // console.log(main)
             doneCount++;
             console.log(doneCount);
             if(doneCount === main.length) //if i'm done w my program
@@ -500,7 +491,6 @@ function Anim() {
     function DIV(n1, n2) { return Number(n1) / Number(n2) }
     function SUB(n1, n2) { return Number(n1) - Number(n2) }
     function LD(address) {console.log("address",address," mem[a]",memory[address]); return memory[address] }
-
     function STR(address, value) {
         //console.log("will change mem")
         let memory2 = memory;
@@ -509,17 +499,12 @@ function Anim() {
         //console.log("memory after store")
         //console.log(memory)
     }
-
-
-
     function startExecution() {
         loopOnAdd()
         loopOnMul()
         loopOnLoad()
         loopOnStore()
     }
-
-
     function exec(s, Vj, Vk) {
         const inst = s.split(',');
         //console.log(inst[0])
@@ -537,7 +522,6 @@ function Anim() {
 
 
     }
-
     function type(instruction){
         const op= instruction.substring(0,3).toLowerCase();
         if(op==="add"|| op==="sub")return 1;
@@ -564,15 +548,15 @@ function Anim() {
     function putInStation(instruction, stationIdx , tagIdx){
         //w update el tag bel station example: tag=M1
         //void
-     if(stationIdx===3){ // store
-          putInStore(instruction , tagIdx);
-      }else if (stationIdx===4){ //load
-          putInLoad(instruction , tagIdx);
-      }else if (stationIdx===2){
-          putInMul(instruction , tagIdx);
-      }else{
-          putInAdd(instruction , tagIdx);
-      }
+        if(stationIdx===3){ // store
+            putInStore(instruction , tagIdx);
+        }else if (stationIdx===4){ //load
+            putInLoad(instruction , tagIdx);
+        }else if (stationIdx===2){
+            putInMul(instruction , tagIdx);
+        }else{
+            putInAdd(instruction , tagIdx);
+        }
     }
     function getRegNo(register){ // takes as an input R123 return 123
         var arr = (register+"").split(" ");
@@ -703,7 +687,7 @@ function Anim() {
     }
     function regReady(register){
         const r = reg[Number(register)];
-       // console.log(r);
+        // console.log(r);
         if(r.Qi===""||r.Qi===0)return true; // wa have the register value ready
         return false;
         //returns true register has val, false if no val yet (just tag)
@@ -722,8 +706,6 @@ function Anim() {
         reg2[Number(register)]=r;
         setReg(reg2);
     }
-
-
     function InstructionsFront() {
         return (
             <TableContainer component={Paper}>
@@ -772,9 +754,9 @@ function Anim() {
                             style={{color:"white"}}
                             // color="white"
                         >
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}{flag.toUpperCase()}
                         </IconButton>
-                             </StyledTableHead>
+                                </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">op</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Vj</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Vk</StyledTableHead>
@@ -784,8 +766,9 @@ function Anim() {
                         </TableRow>
                     </TableHead>
                     <React.Fragment>
+                        {open===true &&
                     <TableBody>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
+                    {/* <Collapse in={open} timeout="auto" unmountOnExit> */}
                         {table.map((row) => (
                             <StyledTableRow >
                                 <StyledTableCell scope="row">
@@ -799,25 +782,37 @@ function Anim() {
                                 <StyledTableCell align="left">{row.Qk}</StyledTableCell>
                                 <StyledTableCell align="left">{row.busy}</StyledTableCell>
                             </StyledTableRow>))}
-                            </Collapse>
+                            {/* </Collapse> */}
                     </TableBody>
+                        }
                     </React.Fragment>
                 </Table>
             </TableContainer>
         )
     }
+    function LoadFront() {
+        const [open, setOpen] = React.useState(false);
 
-    function loadFront() {
         return(
             <TableContainer component={Paper}>
                 <Table   aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead><IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                            style={{color:"white"}}
+                            // color="white"
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}LOAD
+                        </IconButton> </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
+                    {open===true &&
+
                     <TableBody>
                         {load.map((row) => (
                             <StyledTableRow >
@@ -828,24 +823,37 @@ function Anim() {
                                 <StyledTableCell align="left">{row.busy}</StyledTableCell>
                             </StyledTableRow>))}
                     </TableBody>
+    }
                 </Table>
             </TableContainer>
         )
     }
+    function StoreFront() {
+        const [open, setOpen] = React.useState(false);
 
-    function storeFront() {
         return(
             <TableContainer component={Paper}>
                 <Table  aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead>
+                            <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                            style={{color:"white"}}
+                            // color="white"
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}STORE
+                        </IconButton> </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">V</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Q</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">busy</StyledTableHead>
                         </TableRow>
                     </TableHead>
+                    {open===true &&
+
                     <TableBody>
                         {store.map((row) => (
                             <StyledTableRow >
@@ -859,22 +867,36 @@ function Anim() {
                                 <StyledTableCell align="left">{row.busy}</StyledTableCell>
                             </StyledTableRow>))}
                     </TableBody>
+    }
                 </Table>
             </TableContainer>
         )
     }
+    function RegFront() {
+        const [open, setOpen] = React.useState(false);
 
-    function regFront() {
         return(
             <TableContainer component={Paper}>
                 <Table  aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead> </StyledTableHead>
+                            <StyledTableHead> 
+                            <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                            style={{color:"white"}}
+                            // color="white"
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}REGs
+                        </IconButton>
+                            </StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Qi</StyledTableHead>
                             <StyledTableHead style={{color:"white"}} align="left">Value</StyledTableHead>
                         </TableRow>
                     </TableHead>
+                    {open===true &&
+
                     <TableBody>
                         {reg.map((row) => (
                             <StyledTableRow >
@@ -886,24 +908,41 @@ function Anim() {
                                 <StyledTableCell align="left">{row.val}</StyledTableCell>
                             </StyledTableRow>))}
                     </TableBody>
+    }
                 </Table>
             </TableContainer>
         )
     }
-    function memFront() {
+    function MemFront() {
         let mem=Object.keys(memory);
+        const [open, setOpen] = React.useState(false);
+
         return(
             <TableContainer component={Paper}>
                 <Table  aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead>
+                        <StyledTableHead> 
+                            <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                            style={{color:"white"}}
+                            // color="white"
+                        >
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}Memory Address
+                        </IconButton>
+                            </StyledTableHead>
+                            {/* <StyledTableHead style={{color:"white"}} align="left">Address</StyledTableHead> */}
                             <StyledTableHead style={{color:"white"}} align="left">Value</StyledTableHead>
                         </TableRow>
                     </TableHead>
+                    {open===true &&
+
                     <TableBody>
                         { mem.map( (row) => (
                             <StyledTableRow >
+                                
                                 <StyledTableCell scope="row">
                                     {row}
                                 </StyledTableCell>
@@ -911,6 +950,7 @@ function Anim() {
                                 <StyledTableCell align="left">{memory[row]}</StyledTableCell>
                             </StyledTableRow>))}
                     </TableBody>
+    }
                 </Table>
             </TableContainer>
         )
@@ -958,10 +998,10 @@ function Anim() {
                                     <br/><br/>
                                     {StatesFront("add")}<br/><br/>
                                     {StatesFront("mul")}<br/><br/>
-                                    {loadFront()}<br/><br/>
-                                    {storeFront()}<br/><br/>
-                                    {regFront()}<br/><br/>
-                                    {memFront()}
+                                    {LoadFront()}<br/><br/>
+                                    {StoreFront()}<br/><br/>
+                                    {RegFront()}<br/><br/>
+                                    {MemFront()}
                                 </React.Fragment>
                             </React.Fragment>
                         </Paper>
@@ -972,6 +1012,6 @@ function Anim() {
             </div>
         </div>
     )
-}
+    }
 
-export default Anim;
+    export default Anim;
